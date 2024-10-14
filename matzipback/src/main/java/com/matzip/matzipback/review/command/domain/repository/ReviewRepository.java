@@ -1,6 +1,7 @@
 package com.matzip.matzipback.review.command.domain.repository;
 
 import com.matzip.matzipback.review.command.domain.aggregate.Review;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
@@ -10,4 +11,7 @@ public interface ReviewRepository {
     Optional<Review> findById(Long reviewSeq);
 
     void deleteById(Long reviewSeq);
+
+    @Query("SELECT reviewUserSeq FROM Review WHERE reviewSeq = :reviewSeq")
+    Long findReviewUserSeqByReviewSeq(Long reviewSeq);
 }
