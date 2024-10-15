@@ -10,6 +10,7 @@ import com.matzip.matzipback.responsemessage.SuccessResMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +36,7 @@ public class ReviewReportController {
             try {
                 reportReviewService.saveReviewReport(CurrentUserSeq, reviewSeq, reviewReportRequest);
                 return ResponseEntity.ok(new SuccessResMessage(SuccessCode.BASIC_SAVE_SUCCESS));
-            } catch (Exception e) { System.out.println("e.getMessage() = " + e.getMessage()); return null; }
+            } catch (DataIntegrityViolationException e) { throw new RestApiException(ErrorCode.NOT_FOUND); }
         }
     }
 }
