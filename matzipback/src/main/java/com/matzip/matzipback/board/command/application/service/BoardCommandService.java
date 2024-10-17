@@ -1,19 +1,23 @@
 package com.matzip.matzipback.board.command.application.service;
 
+import com.matzip.matzipback.board.command.domain.aggregate.BoardCategory;
+import com.matzip.matzipback.board.command.domain.repository.BoardCategoryRepository;
 import com.matzip.matzipback.board.command.domain.service.BoardDomainService;
+import com.matzip.matzipback.board.command.application.dto.BoardCategoryRequest;
 import com.matzip.matzipback.common.util.CustomUserUtils;
-import com.matzip.matzipback.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.matzip.matzipback.exception.ErrorCode.UNAUTHORIZED_REQUEST;
 
 @Service
 @RequiredArgsConstructor
 public class BoardCommandService {
 
     private final BoardDomainService boardDomainService;
+    private final BoardCategoryRepository boardCategoryRepository;
+    private final ModelMapper modelMapper;
 
     // 즐겨찾기 등록 또는 취소
     @Transactional
@@ -40,5 +44,16 @@ public class BoardCommandService {
         Long loginUser = CustomUserUtils.getCurrentUserSeq();
 
         boardDomainService.deleteBoardLike(loginUser, boardCategorySeq);
+    }
+
+    /* 게시판 카테고리 등록 */
+    @Transactional
+    public Long createCategory(BoardCategoryRequest newCategory) {
+
+        // 게시판 카테고리 저장 후 BoardCategory Entity 반환
+        BoardCategory savedCategory = boardCategoryRepository.save(
+                modelMapper.map(newCategory, BoardCategory.class));
+
+        return savedCategory.getBoardCategorySeq();
     }
 }
