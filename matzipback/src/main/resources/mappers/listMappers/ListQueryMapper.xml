@@ -5,17 +5,34 @@
 
 <mapper namespace="com.matzip.matzipback.matzipList.query.mapper.ListQueryMapper">
 
-    <select  id="getListBox" resultType="com.matzip.matzipback.matzipList.query.dto.ListSearchAllDTO">
+    <resultMap id="listBoxContent" type="com.matzip.matzipback.matzipList.query.dto.ListSearchAllDTO">
+        <result property="listUserSeq" column="list_user_seq"/>
+        <result property="userNickname" column="user_nickname"/>
+        <!-- 리스트 정보를 리스트 조회 안으로 -->
+        <collection property="ListBoxList" ofType="com.matzip.matzipback.matzipList.query.dto.ListBoxListDTO">
+            <result property="listTitle" column="list_title"/>
+            <result property="listContent" column="list_content"/>
+            <result property="listLevel" column="list_level"/>
+        </collection>
+
+    </resultMap>
+
+    <select  id="getListBox" resultMap="listBoxContent">
         SELECT
-            list_title,
-            list_level
-          FROM
-            lists
-         WHERE
-             list_user_seq = #{listUserSeq}
+        l.list_user_seq,
+        u.user_nickname,
+        l.list_title,
+        l.list_content,
+        l.list_level
+        FROM
+        lists l
+        LEFT JOIN users u ON l.list_user_seq = u.user_seq
+
+        WHERE
+        list_user_seq = #{listUserSeq}
 
         ORDER BY
-            list_level ASC
+        list_level ASC
     </select>
 
     <select  id="getUserListBox" resultType="com.matzip.matzipback.matzipList.query.dto.ListSearchUserDTO">
