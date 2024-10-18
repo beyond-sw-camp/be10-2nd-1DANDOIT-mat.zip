@@ -111,6 +111,29 @@ public class BoardCommandController {
         }
     }
 
+    /* 게시판 카테고리 삭제 */
+    @DeleteMapping("/boards/{boardCategorySeq}")
+    @Operation(summary = "게시판 카테고리 삭제", description = "관리자가 게시판 카테고리를 삭제한다.")
+    public ResponseEntity<SuccessResMessage> deleteBoardCategory(@PathVariable Long boardCategorySeq) {
+
+        // 관리자 여부 확인
+        try {
+            if (CustomUserUtils.getCurrentUserAuthorities().iterator().next().getAuthority().equals("admin")) {
+
+                // 게시판 카테고리 삭제
+                boardCommandService.deleteBoardCategory(boardCategorySeq);
+
+                return ResponseEntity.ok(new SuccessResMessage(SuccessCode.BASIC_UPDATE_SUCCESS));
+
+            } else {
+                throw new RestApiException(FORBIDDEN_ACCESS);   // 권한 없음
+            }
+        } catch (NullPointerException e) {
+            throw new RestApiException(UNAUTHORIZED_REQUEST);   // 로그인, 인증 안 한 사람
+        }
+
+    }
+
 }
 
 
