@@ -69,6 +69,17 @@ public class BoardCommandService {
 
         // 게시판 카테고리 수정
         boardCategory.updateCategoryDetails(updateCategory.getBoardCategoryName());
+    }
 
+    /* 게시판 카테고리 삭제 */
+    @Transactional
+    public void deleteBoardCategory(Long boardCategorySeq) {
+
+        // 원본 카테고리 가져오기
+        BoardCategory boardCategory = boardCategoryRepository.findById(boardCategorySeq)
+                .orElseThrow(() -> new RestApiException(ErrorCode.NOT_FOUND));
+
+        // 게시판 카테고리 삭제
+        boardCategoryRepository.deleteById(boardCategorySeq);
     }
 }

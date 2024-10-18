@@ -10,4 +10,5 @@ public interface BoardCategoryRepository {
 
     Optional<BoardCategory> findById(Long boardCategorySeq);
 
+    void deleteById(Long boardCategorySeq);
 }
