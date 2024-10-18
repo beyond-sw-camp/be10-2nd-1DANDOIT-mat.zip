@@ -35,18 +35,22 @@
         list_level ASC
     </select>
 
-    <select  id="getUserListBox" resultType="com.matzip.matzipback.matzipList.query.dto.ListSearchUserDTO">
+    <select  id="getUserListBox" resultMap="listBoxContent">
         SELECT
-               list_title,
-               list_level
-          FROM
-               lists
-         WHERE
-               list_user_seq = #{listUserSeq}
-               AND list_status = 'active'
-        ORDER BY
-               list_level ASC
+        l.list_user_seq,
+        u.user_nickname,
+        l.list_title,
+        l.list_content,
+        l.list_level
+        FROM
+        lists l
+        LEFT JOIN users u ON l.list_user_seq = u.user_seq
 
+        WHERE
+        list_user_seq = #{listUserSeq}
+
+        ORDER BY
+        list_level ASC
     </select>
     <!-- 리스트 상세 조회를 위한 resultMap    -->
     <resultMap id="ListContentMap" type="com.matzip.matzipback.matzipList.query.dto.ListContentDTO">
