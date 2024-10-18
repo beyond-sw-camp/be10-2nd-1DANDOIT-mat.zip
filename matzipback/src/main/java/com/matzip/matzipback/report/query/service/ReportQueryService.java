@@ -40,6 +40,7 @@ public class ReportQueryService {
     }
 
     // 신고 상세 조회
+    @Transactional(readOnly = true)
     public ReportDetailResponse getReport(Long reportSeq) {
         ReportDTO report = reportMapper.selectReportBySeq(reportSeq);
 
@@ -50,5 +51,16 @@ public class ReportQueryService {
         }
 
         return new ReportDetailResponse(report);
+    }
+
+    // 중복 신고 검증
+    @Transactional(readOnly = true)
+    public boolean duplicateReportCheck(Long userSeq, Long categorySeq, String category) {
+
+        Long check = reportMapper.selectDuplicateReport(userSeq, categorySeq, category);
+
+        System.out.println(check);
+
+        return check > 0;
     }
 }

@@ -96,4 +96,28 @@
         WHERE report_seq = #{reportSeq}
     </select>
 
+    <!-- 중복 신고 검증 -->
+    <select id="selectDuplicateReport" resultType="Long">
+        SELECT
+            COUNT(*)
+        FROM
+            report
+        WHERE
+            reporter_user_seq = #{userSeq}
+        AND
+        <if test="category == 'post'">
+            post_seq
+        </if><if test="category == 'postcomment'">
+            post_comment_seq
+        </if><if test="category == 'list'">
+            list_seq
+        </if><if test="category == 'listcomment'">
+            list_comment_seq
+        </if><if test="category == 'review'">
+            review_seq
+        </if><if test="category == 'message'">
+            message_seq
+        </if>
+        = #{categorySeq}
+    </select>
 </mapper>
