@@ -96,6 +96,16 @@
         WHERE report_seq = #{reportSeq}
     </select>
 
+    <!-- 쪽지 신고자 검증 -->
+    <select id="selectMessageReceiver" resultType="Long">
+        SELECT
+            message_receive_user_seq
+        FROM
+            messages
+        WHERE
+            message_seq = #{categorySeq}
+    </select>
+
     <!-- 중복 신고 검증 -->
     <select id="selectDuplicateReport" resultType="Long">
         SELECT

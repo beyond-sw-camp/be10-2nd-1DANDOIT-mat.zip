@@ -1,5 +1,6 @@
 package com.matzip.matzipback.report.query.service;
 
+import com.matzip.matzipback.exception.ErrorCode;
 import com.matzip.matzipback.exception.RestApiException;
 import com.matzip.matzipback.report.query.dto.ReportDTO;
 import com.matzip.matzipback.report.query.dto.ReportListResponse;
@@ -10,8 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-import static com.matzip.matzipback.exception.ErrorCode.NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +44,7 @@ public class ReportQueryService {
         ReportDTO report = reportMapper.selectReportBySeq(reportSeq);
 
         if (report == null) {
-            throw new RestApiException(NOT_FOUND);
+            throw new RestApiException(ErrorCode.NOT_FOUND);
         } else {
             report.setReasons(reportMapper.selectReportReasons(report.getReportSeq()));
         }
@@ -53,15 +52,17 @@ public class ReportQueryService {
         return new ReportDetailResponse(report);
     }
 
-    // 중복 신고 검증
+    // 신고자 검증
     @Transactional(readOnly = true)
-    public boolean duplicateReportCheck(Long userSeq, Long categorySeq, String category) {
+    public boolean ReporterCheck(Long userSeq, Long categorySeq, String category) {
 
-        Long check = reportMapper.selectDuplicateReport(userSeq, categorySeq, category);
+        // message일 경우 수신자와 신고자가 일치하는지 확인
+        if (category.equals("message") && !reportMapper.selectMessageReceiver(categorySeq).equals(userSeq)) {
+            throw new RestApiException(ErrorCode.FORBIDDEN_ACCESS);
+        }
 
-        System.out.println(check);
-
-        return check > 0;
+        // 중복 신고 확인 결과 반환
+        return reportMapper.selectDuplicateReport(userSeq, categorySeq, category) > 0;
     }
 
     // 피신고자 확인

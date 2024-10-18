@@ -40,4 +40,7 @@ public interface ReportMapper {
     Long selectReportedUser(
             @Param("categorySeq") Long categorySeq,
             @Param("category") String category);
+
+    Long selectMessageReceiver(
+            @Param("categorySeq") Long categorySeq);
 }

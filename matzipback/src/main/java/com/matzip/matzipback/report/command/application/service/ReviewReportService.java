@@ -8,7 +8,7 @@ import com.matzip.matzipback.report.command.domain.aggregate.Report;
 import com.matzip.matzipback.report.command.domain.aggregate.ReportReason;
 import com.matzip.matzipback.report.command.domain.repository.ReportReasonDomainRepository;
 import com.matzip.matzipback.report.command.domain.repository.ReportDomainRepository;
-import com.matzip.matzipback.report.command.dto.ReviewReportRequest;
+import com.matzip.matzipback.report.command.dto.ReportRequest;
 import com.matzip.matzipback.report.query.service.ReportQueryService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -25,26 +25,25 @@ public class ReviewReportService {
     private final ModelMapper modelMapper;
 
     @Transactional
-    public void saveReviewReport(Long reporterUserSeq, Long reviewSeq, ReviewReportRequest reviewReportRequest) {
+    public void saveReport(Long reporterUserSeq, Long categorySeq, String category, ReportRequest reportRequest) {
 
-        // 중복 신고 확인
-        if (reportQueryService.duplicateReportCheck(reporterUserSeq, reviewSeq, "review")) {
+        // 신고자 확인
+        if (reportQueryService.ReporterCheck(reporterUserSeq, categorySeq, category)) {
             throw new RestApiException(ErrorCode.CONFLICT); }
 
         // 피신고자 확인
-        Long reportedUserSeq = reportQueryService.findReportedUser(reviewSeq, "review");
+        Long reportedUserSeq = reportQueryService.findReportedUser(categorySeq, category);
 
         // report 테이블에 저장
         Report newReport = modelMapper.map(
-                ReportMappingDTO.review(
-                        reporterUserSeq, reportedUserSeq, reviewReportRequest.getReportContent(), reviewSeq),
+                ReportMappingDTO.make(
+                        reporterUserSeq, reportedUserSeq, reportRequest.getReportContent(), categorySeq, category),
                 Report.class);
         newReport = reportDomainRepository.save(newReport);
 
         // report_reason 테이블에 저장
-        System.out.println("reviewReportRequest = " + reviewReportRequest.getReportReason());
-        if (reviewReportRequest.getReportReason() != null) {
-            for (Long reason : reviewReportRequest.getReportReason()) {
+        if (reportRequest.getReportReason() != null) {
+            for (Long reason : reportRequest.getReportReason()) {
                 ReportReason newReportReason = modelMapper.map(
                         new ReportReasonDTO(newReport.getReportSeq(), reason), ReportReason.class);
                 reportReasonsDomainRepository.save(newReportReason);

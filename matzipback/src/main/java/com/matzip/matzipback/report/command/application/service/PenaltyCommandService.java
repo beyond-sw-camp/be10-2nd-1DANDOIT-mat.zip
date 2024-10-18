@@ -88,7 +88,7 @@ public class PenaltyCommandService {
                 MyListComment listComment = listCmtDomainRepository.findById(newPenalty.getSeq()).orElseThrow(() -> new RestApiException(NOT_FOUND));
                 listComment.updateListCmtStatus("inactive");
                 break;
-            case "review":
+            case "make":
                 Review review = reviewRepository.findById(newPenalty.getSeq()).orElseThrow(() -> new RestApiException(NOT_FOUND));
                 review.updateReviewStatus("inactive");
                 break;
