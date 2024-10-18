@@ -33,6 +33,8 @@
     </select>
     <!-- 리스트 상세 조회를 위한 resultMap    -->
     <resultMap id="ListContentMap" type="com.matzip.matzipback.matzipList.query.dto.ListContentDTO">
+        <result property="listUserSeq" column="list_user_seq"/>
+        <result property="userNickname" column="user_nickname"/>
         <result property="listTitle" column="list_title"/>
         <result property="listContent" column="list_content"/>
         <result property="listCreatedTime" column="list_created_time"/>
@@ -51,27 +53,30 @@
 
     <select id="getListContests" resultMap="ListContentMap">
         SELECT
-               l.list_title,
-               l.list_content,
-               l.list_created_time,
-               l.list_updated_time,
-               COUNT(k.like_seq) AS like_count,
-               r.restaurant_title,
-               m.list_matzip_comment,
-               r.restaurant_address,
-               r.restaurant_phone,
-               r.restaurant_star
-          FROM
-               lists l
-          LEFT JOIN list_matzip m ON l.list_seq = m.list_seq
-          LEFT JOIN restaurant r ON m.restaurant_seq = r.restaurant_seq
-          LEFT JOIN `like` k ON m.list_seq = k.list_seq
-         WHERE
+        l.list_user_seq,
+        u.user_nickname,
+        l.list_title,
+        l.list_content,
+        l.list_created_time,
+        l.list_updated_time,
+        COUNT(k.like_seq) AS like_count,
+        r.restaurant_title,
+        m.list_matzip_comment,
+        r.restaurant_address,
+        r.restaurant_phone,
+        r.restaurant_star
+        FROM
+        lists l
+        LEFT JOIN list_matzip m ON l.list_seq = m.list_seq
+        LEFT JOIN restaurant r ON m.restaurant_seq = r.restaurant_seq
+        LEFT JOIN `like` k ON m.list_seq = k.list_seq
+        LEFT JOIN users u ON l.list_user_seq = u.user_seq
+        WHERE
                l.list_seq = #{listSeq}
-         GROUP BY
-               l.list_seq, r.restaurant_seq, m.list_matzip_seq
-         ORDER BY
-               l.list_title ASC;
+        GROUP BY
+        l.list_seq, r.restaurant_seq, m.list_matzip_seq
+        ORDER BY
+        l.list_title ASC;
     </select>
 
 </mapper>
