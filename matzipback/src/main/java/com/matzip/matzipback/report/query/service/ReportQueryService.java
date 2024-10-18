@@ -63,4 +63,10 @@ public class ReportQueryService {
 
         return check > 0;
     }
+
+    // 피신고자 확인
+    @Transactional(readOnly = true)
+    public Long findReportedUser(Long categorySeq, String category) {
+        return reportMapper.selectReportedUser(categorySeq, category);
+    }
 }

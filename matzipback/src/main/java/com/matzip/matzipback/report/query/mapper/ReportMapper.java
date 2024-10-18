@@ -36,4 +36,8 @@ public interface ReportMapper {
             @Param("userSeq") Long userSeq,
             @Param("categorySeq") Long categorySeq,
             @Param("category") String category);
+
+    Long selectReportedUser(
+            @Param("categorySeq") Long categorySeq,
+            @Param("category") String category);
 }

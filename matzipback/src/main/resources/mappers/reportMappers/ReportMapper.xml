@@ -120,4 +120,16 @@
         </if>
         = #{categorySeq}
     </select>
+
+    <!-- 피신고자 확인 -->
+    <select id="selectReportedUser" resultType="Long">
+        SELECT
+        <if test="category == 'post'"> post_user_seq FROM post WHERE post_seq </if>
+        <if test="category == 'postcomment'"> post_comment_seq FROM post_comment WHERE post_comment_seq </if>
+        <if test="category == 'list'"> list_user_seq FROM lists WHERE list_seq </if>
+        <if test="category == 'listcomment'"> list_comment_user_seq FROM list_comment WHERE list_comment_seq </if>
+        <if test="category == 'review'"> review_user_seq FROM review WHERE review_seq </if>
+        <if test="category == 'message'"> message_send_user_seq FROM messages WHERE message_seq </if>
+        = #{categorySeq}
+    </select>
 </mapper>

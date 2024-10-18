@@ -10,7 +10,6 @@ import com.matzip.matzipback.report.command.domain.repository.ReportReasonDomain
 import com.matzip.matzipback.report.command.domain.repository.ReportDomainRepository;
 import com.matzip.matzipback.report.command.dto.ReviewReportRequest;
 import com.matzip.matzipback.report.query.service.ReportQueryService;
-import com.matzip.matzipback.review.command.domain.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReviewReportService {
 
     private final ReportQueryService reportQueryService;
-    private final ReviewRepository reviewRepository;
     private final ReportDomainRepository reportDomainRepository;
     private final ReportReasonDomainRepository reportReasonsDomainRepository;
     private final ModelMapper modelMapper;
@@ -33,8 +31,8 @@ public class ReviewReportService {
         if (reportQueryService.duplicateReportCheck(reporterUserSeq, reviewSeq, "review")) {
             throw new RestApiException(ErrorCode.CONFLICT); }
 
-        // 피신고자를 구해야함
-        Long reportedUserSeq = reviewRepository.findReviewUserSeqByReviewSeq(reviewSeq);
+        // 피신고자 확인
+        Long reportedUserSeq = reportQueryService.findReportedUser(reviewSeq, "review");
 
         // report 테이블에 저장
         Report newReport = modelMapper.map(
