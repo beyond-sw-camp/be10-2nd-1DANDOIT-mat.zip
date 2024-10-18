@@ -8,7 +8,7 @@ import com.matzip.matzipback.report.command.domain.aggregate.Report;
 import com.matzip.matzipback.report.command.domain.aggregate.ReportReason;
 import com.matzip.matzipback.report.command.domain.repository.ReportReasonDomainRepository;
 import com.matzip.matzipback.report.command.domain.repository.ReportDomainRepository;
-import com.matzip.matzipback.report.command.dto.ReportRequest;
+import com.matzip.matzipback.report.command.application.dto.ReportRequest;
 import com.matzip.matzipback.report.query.service.ReportQueryService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class ReviewReportService {
+public class ReportCommandService {
 
     private final ReportQueryService reportQueryService;
     private final ReportDomainRepository reportDomainRepository;

@@ -1,4 +1,4 @@
-package com.matzip.matzipback.report.command.dto;
+package com.matzip.matzipback.report.command.application.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

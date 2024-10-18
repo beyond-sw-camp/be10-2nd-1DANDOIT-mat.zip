@@ -1,7 +1,5 @@
 package com.matzip.matzipback.report.command.domain.aggregate;
 
-import com.matzip.matzipback.report.command.dto.ListCmtReportReqDTO;
-import com.matzip.matzipback.report.command.dto.ListReportReqDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -44,30 +42,6 @@ public class Report {
     private Long listCommentSeq;
     private Long messageSeq;
     private Long reviewSeq;
-
-
-
-    private Report(Long reporterUserSeq, Long reportedUserSeq, ListReportReqDTO listReportReqDTO) {
-        this.reporterUserSeq = reporterUserSeq;
-        this.reportedUserSeq = reportedUserSeq;
-        this.listSeq = listReportReqDTO.getListSeq();
-        this.reportContent = listReportReqDTO.getReportContent();
-    }
-
-    private Report(Long reporterUserSeq, Long reportedUserSeq, ListCmtReportReqDTO listCmtReportReqDTO) {
-        this.reporterUserSeq = reporterUserSeq;
-        this.reportedUserSeq = reportedUserSeq;
-        this.listCommentSeq = listCmtReportReqDTO.getListCommentSeq();
-        this.reportContent = listCmtReportReqDTO.getReportContent();
-    }
-
-    public static Report getListReportSeq(Long reporterUserSeq, Long reportedUserSeq, ListReportReqDTO listReportReqDTO) {
-        return new Report(reporterUserSeq, reportedUserSeq, listReportReqDTO);
-    }
-
-    public static Report getListCmtReportSeq(Long reporterUserSeq, Long reportedUserSeq, ListCmtReportReqDTO listCmtReportReqDTO) {
-        return new Report(reporterUserSeq, reportedUserSeq, listCmtReportReqDTO);
-    }
 
     public void updateReportDetails(Long penaltySeq) {
         this.penaltySeq = penaltySeq;

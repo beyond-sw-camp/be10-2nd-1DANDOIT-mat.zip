@@ -3,8 +3,8 @@ package com.matzip.matzipback.report.command.application.controller;
 import com.matzip.matzipback.common.util.CustomUserUtils;
 import com.matzip.matzipback.exception.ErrorCode;
 import com.matzip.matzipback.exception.RestApiException;
-import com.matzip.matzipback.report.command.application.service.ReviewReportService;
-import com.matzip.matzipback.report.command.dto.ReportRequest;
+import com.matzip.matzipback.report.command.application.service.ReportCommandService;
+import com.matzip.matzipback.report.command.application.dto.ReportRequest;
 import com.matzip.matzipback.responsemessage.SuccessCode;
 import com.matzip.matzipback.responsemessage.SuccessResMessage;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Report", description = "신고")
 public class ReportController {
 
-    private final ReviewReportService reportReviewService;
+    private final ReportCommandService reportReviewService;
 
     @PostMapping("/{category}/{categorySeq}/report")
     @Operation(summary = "신고", description = "대상을 신고한다.")
