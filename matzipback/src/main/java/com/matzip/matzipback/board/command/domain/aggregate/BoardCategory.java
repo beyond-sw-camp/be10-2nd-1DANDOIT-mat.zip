@@ -15,4 +15,7 @@ public class BoardCategory {
     private Long boardCategorySeq;
     private String boardCategoryName;
 
+    public void updateCategoryDetails(String boardCategoryName) {
+        this.boardCategoryName =boardCategoryName;
+    }
 }
