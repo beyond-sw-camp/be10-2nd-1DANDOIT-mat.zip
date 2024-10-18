@@ -3,9 +3,12 @@ package com.matzip.matzipback.matzipList.query.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class ListSearchUserDTO {
-    private String listTitle;
-    private long listLevel;
+    private long listUserSeq;
+    private String userNickname;
+    private List<ListBoxListDTO> ListBoxList;
 }
