@@ -10,6 +10,8 @@ import java.util.List;
 @Setter
 public class ListContentDTO {
 
+    private Long listUserSeq;
+    private String userNickname;
     private String listTitle;
     private String listContent;
     private LocalDateTime listCreatedTime;
