@@ -87,5 +87,30 @@ public class BoardCommandController {
         }
     }
 
+    /* 게시판 카테고리 수정 */
+    @PutMapping("/boards/{boardCategorySeq}")
+    @Operation(summary = "게시판 카테고리 수정", description = "관리자가 게시판 카테고리를 수정한다.")
+    public ResponseEntity<SuccessResMessage> updateBoardCategory(
+            @PathVariable Long boardCategorySeq,
+            @Valid @RequestBody BoardCategoryRequest updateCategory) {
+
+        // 관리자 여부 확인
+        try {
+            if (CustomUserUtils.getCurrentUserAuthorities().iterator().next().getAuthority().equals("admin")) {
+
+                // 게시판 카테고리 수정
+                boardCommandService.updateBoardCategory(boardCategorySeq, updateCategory);
+
+                return ResponseEntity.ok(new SuccessResMessage(SuccessCode.BASIC_UPDATE_SUCCESS));
+
+            } else {
+                throw new RestApiException(FORBIDDEN_ACCESS);   // 권한 없음
+            }
+        } catch (NullPointerException e) {
+            throw new RestApiException(UNAUTHORIZED_REQUEST);   // 로그인, 인증 안 한 사람
+        }
+    }
 
 }
+
+

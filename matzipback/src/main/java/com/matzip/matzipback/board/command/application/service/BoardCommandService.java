@@ -5,6 +5,8 @@ import com.matzip.matzipback.board.command.domain.repository.BoardCategoryReposi
 import com.matzip.matzipback.board.command.domain.service.BoardDomainService;
 import com.matzip.matzipback.board.command.application.dto.BoardCategoryRequest;
 import com.matzip.matzipback.common.util.CustomUserUtils;
+import com.matzip.matzipback.exception.ErrorCode;
+import com.matzip.matzipback.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -55,5 +57,18 @@ public class BoardCommandService {
                 modelMapper.map(newCategory, BoardCategory.class));
 
         return savedCategory.getBoardCategorySeq();
+    }
+
+    /* 게시판 카테고리 수정 */
+    @Transactional
+    public void updateBoardCategory(Long boardCategorySeq, BoardCategoryRequest updateCategory) {
+
+        // 원본 카테고리 가져오기
+        BoardCategory boardCategory = boardCategoryRepository.findById(boardCategorySeq)
+                .orElseThrow(() -> new RestApiException(ErrorCode.NOT_FOUND));
+
+        // 게시판 카테고리 수정
+        boardCategory.updateCategoryDetails(updateCategory.getBoardCategoryName());
+
     }
 }

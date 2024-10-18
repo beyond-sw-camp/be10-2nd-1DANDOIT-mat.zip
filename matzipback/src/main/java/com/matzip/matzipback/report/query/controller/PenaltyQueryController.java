@@ -30,8 +30,8 @@ public class PenaltyQueryController {
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
             @RequestParam(required = false) Long penaltyUserSeq,
-            @RequestParam(required = false) String penaltyStatus,  // 현재 패널티가 끝났는지(done) 진행중(ing)인지
-            @RequestParam(required = false) String penaltyType,    // "permanent" or "ban"
+            @RequestParam(required = false) String penaltyStatus,  // "done"(패널티해제) or "ing"(패널티 상태)
+            @RequestParam(required = false) String penaltyType,    // "permanent"(영구정지) or "ban"(정지)
             @RequestParam(required = false) String penaltyReasonContent) {
 
         // 관리자 여부 확인
