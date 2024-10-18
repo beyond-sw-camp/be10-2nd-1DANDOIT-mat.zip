@@ -31,4 +31,16 @@ public interface ReportMapper {
 
     ReportDTO selectReportBySeq(
             @Param("reportSeq") Long reportSeq);
+
+    Long selectDuplicateReport(
+            @Param("userSeq") Long userSeq,
+            @Param("categorySeq") Long categorySeq,
+            @Param("category") String category);
+
+    Long selectReportedUser(
+            @Param("categorySeq") Long categorySeq,
+            @Param("category") String category);
+
+    Long selectMessageReceiver(
+            @Param("categorySeq") Long categorySeq);
 }

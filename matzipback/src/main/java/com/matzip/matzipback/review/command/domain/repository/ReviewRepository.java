@@ -12,6 +12,4 @@ public interface ReviewRepository {
 
     void deleteById(Long reviewSeq);
 
-    @Query("SELECT reviewUserSeq FROM Review WHERE reviewSeq = :reviewSeq")
-    Long findReviewUserSeqByReviewSeq(Long reviewSeq);
 }
