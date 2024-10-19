@@ -2,11 +2,14 @@ package com.matzip.matzipback.matzipList.query.controller;
 
 import com.matzip.matzipback.common.util.CustomUserUtils;
 
+import com.matzip.matzipback.matzipList.query.dto.ListBoxResponse;
 import com.matzip.matzipback.matzipList.query.dto.ListContentDTO;
 
 import com.matzip.matzipback.matzipList.query.dto.ListSearchAllDTO;
 import com.matzip.matzipback.matzipList.query.dto.ListSearchUserDTO;
 import com.matzip.matzipback.matzipList.query.service.ListQueryService;
+import com.matzip.matzipback.responsemessage.SuccessCode;
+import com.matzip.matzipback.responsemessage.SuccessSearchResMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -31,11 +34,22 @@ public class ListQueryController {
         Long listUserSeq = CustomUserUtils.getCurrentUserSeq();
         return ResponseEntity.ok().body(listQueryService.getListBox(listUserSeq));
     }
+
     // 다른 유저의 리스트 서랍 조회
     @GetMapping("/listbox/{listUserSeq}")
     @Operation(summary = "다른 유저 리스트 서랍 조회", description = "다른 유저의 리스트 서랍을 조회한다.")
-    public ResponseEntity<List<ListSearchUserDTO>> getUserListBox(@PathVariable("listUserSeq") Long listUserSeq) {
-        return ResponseEntity.ok().body(listQueryService.getUserListBox(listUserSeq));
+    public ResponseEntity<SuccessSearchResMessage<?>> getUserListBox(
+            @RequestParam Long listUserSeq,
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer size
+
+    ) {
+        ListBoxResponse response = listQueryService.getUserListBox(page, size, listUserSeq);
+
+        return ResponseEntity.ok()
+                .body(new SuccessSearchResMessage<>(
+                        SuccessCode.BASIC_GET_SUCCESS
+                        , response));
     }
 
     // 리스트 상세 조회
