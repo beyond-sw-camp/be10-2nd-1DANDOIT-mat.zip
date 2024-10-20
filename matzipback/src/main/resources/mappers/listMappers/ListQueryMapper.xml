@@ -35,7 +35,7 @@
         list_level ASC
     </select>
 
-    <select  id="getUserListBox" resultMap="listBoxContent">
+    <select  id="getListsByUserListBox" resultMap="listBoxContent">
         SELECT
         l.list_user_seq,
         u.user_nickname,
@@ -100,4 +100,10 @@
         l.list_title ASC;
     </select>
 
+    <select id="countListsByListUserSeq" resultType="long">
+        SELECT
+        COUNT(*)
+        FROM lists l
+        WHERE l.list_user_seq = #{ListUserSeq}
+    </select>
 </mapper>
