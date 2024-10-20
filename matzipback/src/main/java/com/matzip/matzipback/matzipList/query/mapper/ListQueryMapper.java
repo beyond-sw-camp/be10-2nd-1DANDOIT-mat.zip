@@ -21,4 +21,6 @@ public interface ListQueryMapper {
     Long countListsByList();
 
     List<ListSearchDTO> getListAll(int offset, Integer size);
+
+    List<ListSearchDTO> getPopularList();
 }
