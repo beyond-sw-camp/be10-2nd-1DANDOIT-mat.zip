@@ -1,5 +1,6 @@
 package com.matzip.matzipuser.users.command.application.service;
 
+import com.matzip.matzipuser.exception.RestApiException;
 import com.matzip.matzipuser.users.command.application.dto.UpdateUserActivityPointDTO;
 import com.matzip.matzipuser.users.command.application.utility.UUIDGenerator;
 import com.matzip.matzipuser.users.command.domain.aggregate.Users;
@@ -57,6 +58,11 @@ public class UsersCommandService {
 //            throw new IllegalArgumentException("휴대폰 인증에 실패했습니다.");
 //        }
 
+        // 닉네임 중복 체크 (사용자가 입력한 경우)
+        if (newUser.getUserNickname() != null && !newUser.getUserNickname().trim().isEmpty()) {
+            checkNicknameDuplication(newUser.getUserNickname());
+        }
+
         // CreateUserRequest DTO를 Users 엔티티로 변환
         Users users = modelMapper.map(newUser, Users.class);
 
@@ -64,9 +70,14 @@ public class UsersCommandService {
         users.encryptPassword(passwordEncoder.encode(newUser.getUserPassword()));
         log.debug("========비밀번호 암호화 완료========");
 
-        // 닉네임 자동 생성
-        String nickName = createUniqueNickname();
-        users.updateNickname(nickName);
+        // 닉네임이 없는 경우 자동 생성
+        if (newUser.getUserNickname() == null || newUser.getUserNickname().isBlank()) {
+            log.info("========닉네임 자동 생성========");
+            String nickname = createUniqueNickname();
+            users.updateNickname(nickname);
+        } else {
+            users.updateNickname(newUser.getUserNickname());
+        }
 
         // Users 엔티티를 데이터베이스에 저장
         Users user = usersDomainRepository.save(users);
@@ -90,25 +101,34 @@ public class UsersCommandService {
         return nickname;
     }
 
-    /* 회원정보 수정 - 닉네임, 휴대폰, 비밀번호, 사업자 인증(추가) */
-    public UpdateUserRequest updateUserInfo(UpdateUserRequest updateUserInfo) {
+    /* 닉네임 중복체크 메소드 */
+    public void checkNicknameDuplication(String nickname) {
+        log.info("========닉네임 중복체크========");
+        if (usersDomainRepository.existsByUserNickname(nickname)) {
+            throw new IllegalArgumentException("이미 사용 중인 닉네임입니다. 다른 닉네임을 선택해주세요.");
+//            throw new RestApiException(ErrorCode.NICKNAME_ALREADY_EXISTS);
+        }
+    }
+
+    /* 회원정보 수정 - 닉네임, 휴대폰, 비밀번호 */
+    public UpdateUserRequest updateUserInfo(long userSeq, UpdateUserRequest updateUserInfo) {
         log.info("========회원정보 수정 서비스 진입========");
 
         // 전달 된 userSeq로 Users 엔티티 조회
-        Users user = usersDomainRepository.findById(updateUserInfo.getUserSeq())
+        Users user =  usersDomainRepository.findById(userSeq)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
         log.info("수정 요청 Nickname: {}", updateUserInfo.getUserNickname());
         log.info("수정 전 Nickname: {}", user.getUserNickname());
 
         // 닉네임 수정
-        if (updateUserInfo.getUserNickname() != null && !updateUserInfo.getUserNickname().trim().isEmpty()) {
+        if (updateUserInfo.getUserNickname() != null && !updateUserInfo.getUserNickname().trim().isBlank()) {
             if (updateUserInfo.getUserNickname().equals(user.getUserNickname())) {  // 수정 전/후 비교
                 throw new IllegalArgumentException("현재 닉네임과 동일한 닉네임으로는 변경할 수 없습니다.");
             }
-            if (usersDomainRepository.existsByUserNickname(updateUserInfo.getUserNickname())) { // 클라이언트에게 전송받은 값이 이미 있는 닉네임인지(TRUE) 중복체크
-                throw new IllegalArgumentException("이미 사용 중인 닉네임입니다. 다른 닉네임을 선택해주세요.");
-            }
+            // 중복 체크 메서드 호출
+            checkNicknameDuplication(updateUserInfo.getUserNickname());
+
             log.info("========닉네임 중복체크 후 수정완료 - UserNickname: {}========", updateUserInfo.getUserNickname());
             user.updateNickname(updateUserInfo.getUserNickname());
         }
@@ -125,12 +145,10 @@ public class UsersCommandService {
         }
 
         // 휴대폰 번호 수정(추가 본인인증은 나중에 구현)
-        if (updateUserInfo.getUserPhone() != null) {
+        if (updateUserInfo.getUserPhone() != null  && !updateUserInfo.getUserPhone().isBlank()) {
             user.updatePhone(updateUserInfo.getUserPhone());
             log.info("========휴대폰 번호 수정완료 - UserPhone: {}========", updateUserInfo.getUserPhone());
         }
-
-        // 사업자 인증
 
         // Users 엔티티 저장
         Users updatedUser = usersDomainRepository.save(user);

@@ -44,7 +44,7 @@ public class UsersInfoController {
             throw new RestApiException(ErrorCode.FORBIDDEN_ACCESS);
         }
 
-         usersCommandService.updateUserInfo(updateUserInfo);
+         usersCommandService.updateUserInfo(userSeq, updateUserInfo);
         return ResponseEntity.ok(new SuccessResMessage(SuccessCode.BASIC_UPDATE_SUCCESS));
     }
 
