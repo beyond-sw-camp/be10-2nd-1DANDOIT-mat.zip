@@ -4,11 +4,8 @@ import com.matzip.matzipback.common.util.CustomUserUtils;
 
 import com.matzip.matzipback.exception.ErrorCode;
 import com.matzip.matzipback.exception.RestApiException;
-import com.matzip.matzipback.matzipList.query.dto.ListBoxResponse;
-import com.matzip.matzipback.matzipList.query.dto.ListContentDTO;
+import com.matzip.matzipback.matzipList.query.dto.*;
 
-import com.matzip.matzipback.matzipList.query.dto.ListSearchAllDTO;
-import com.matzip.matzipback.matzipList.query.dto.ListSearchUserDTO;
 import com.matzip.matzipback.matzipList.query.service.ListQueryService;
 import com.matzip.matzipback.responsemessage.SuccessCode;
 import com.matzip.matzipback.responsemessage.SuccessSearchResMessage;
@@ -28,8 +25,27 @@ public class ListQueryController {
 
     private final ListQueryService listQueryService;
 
+    // 리스트 전체 조회
+    @GetMapping("/listbox/all")
+    @Operation(summary = "모든 리스트 조회", description = "모든 리스트를 조회한다.")
+    public ResponseEntity<SuccessSearchResMessage<?>> listBoxAll(
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer size
+    ) {
+
+        ListAllResponse response = listQueryService.getAllList(page, size);
+
+        return ResponseEntity.ok()
+                .body(new SuccessSearchResMessage<>(
+                        SuccessCode.BASIC_GET_SUCCESS
+                        , response
+                ));
+    }
+
+    // 인기 리스트 조회
+
     // 유저 본인의 리스트 서랍 조회(모든 리스트 상태 조회)
-    @GetMapping("/listbox")
+    @GetMapping("/listbox/listUserSeq")
     @Operation(summary = "본인 리스트 서랍 조회", description = "본인의 리스트 서랍을 조회한다.")
     public ResponseEntity<SuccessSearchResMessage<?>> getListBox(
             @RequestParam(defaultValue = "1") Integer page,
@@ -68,7 +84,7 @@ public class ListQueryController {
     }
 
     // 리스트 상세 조회
-    @GetMapping("/listbox/list/{listSeq}")
+    @GetMapping("/listbox/listUserSeq/{listSeq}")
     @Operation(summary = "리스트 상세 조회", description = "공개된 리스트를 상세 조회한다.")
     public ResponseEntity<SuccessSearchResMessage<?>> getListContents(@PathVariable("listSeq") Long listSeq) {
 //        return ResponseEntity.ok().body(listQueryService.getListContests(listSeq));

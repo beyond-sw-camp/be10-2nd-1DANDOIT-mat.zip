@@ -1,9 +1,6 @@
 package com.matzip.matzipback.matzipList.query.mapper;
 
-import com.matzip.matzipback.matzipList.query.dto.ListBoxListDTO;
-import com.matzip.matzipback.matzipList.query.dto.ListContentDTO;
-import com.matzip.matzipback.matzipList.query.dto.ListSearchAllDTO;
-import com.matzip.matzipback.matzipList.query.dto.ListSearchUserDTO;
+import com.matzip.matzipback.matzipList.query.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -20,4 +17,8 @@ public interface ListQueryMapper {
     List<ListSearchUserDTO> getListsByUserListBox(int offset, Integer size, Long listUserSeq);
 
     long countListsByListUserSeq(Long listUserSeq);
+
+    Long countListsByList();
+
+    List<ListSearchDTO> getListAll(int offset, Integer size);
 }

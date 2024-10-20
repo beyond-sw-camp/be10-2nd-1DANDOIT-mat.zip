@@ -48,6 +48,8 @@
 
         WHERE
         list_user_seq = #{listUserSeq}
+        AND
+        l.list_status = 'active'
 
         ORDER BY
         list_level ASC
@@ -86,6 +88,7 @@
         r.restaurant_address,
         r.restaurant_phone,
         r.restaurant_star
+
         FROM
         lists l
         LEFT JOIN list_matzip m ON l.list_seq = m.list_seq
@@ -103,7 +106,45 @@
     <select id="countListsByListUserSeq" resultType="long">
         SELECT
         COUNT(*)
+
         FROM lists l
+
         WHERE l.list_user_seq = #{ListUserSeq}
+
+        AND l.list_status = 'active'
+    </select>
+
+    <select id="countListsByList" resultType="long">
+        SELECT
+        COUNT(*)
+
+        FROM lists l
+
+        WHERE l.list_status = 'active'
+    </select>
+
+    <resultMap id="ListSearchDTO" type="com.matzip.matzipback.matzipList.query.dto.ListSearchDTO">
+        <result property="listUserSeq" column="list_user_seq"/>
+        <result property="userNickname" column="user_nickname"/>
+        <result property="listTitle" column="list_title"/>
+        <result property="listContent" column="list_content"/>
+        <result property="listLike" column="like_count"/>
+    </resultMap>
+
+    <select id="getListAll" resultMap="ListSearchDTO">
+        SELECT
+        l.list_user_seq,
+        u.user_nickname,
+        l.list_title,
+        l.list_content,
+        (SELECT COUNT(*) FROM `like` k WHERE k.list_seq = l.list_seq) AS like_count
+        FROM
+        lists l
+        LEFT JOIN
+        users u ON l.list_user_seq = u.user_seq
+        WHERE
+        l.list_status = 'active'
+        ORDER BY
+        l.list_level ASC;
     </select>
 </mapper>
