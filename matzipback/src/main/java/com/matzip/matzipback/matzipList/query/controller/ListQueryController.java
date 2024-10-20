@@ -43,6 +43,18 @@ public class ListQueryController {
     }
 
     // 인기 리스트 조회
+    @GetMapping("/listBox/popularList")
+    @Operation(summary = "인기 리스트 조회", description = "인기리스트를 조회한다.")
+    public ResponseEntity<SuccessSearchResMessage<?>> getPopularList(){
+
+        List<ListSearchDTO> response = listQueryService.getPopularList();
+
+        return ResponseEntity.ok()
+                .body(new SuccessSearchResMessage<>(
+                        SuccessCode.BASIC_GET_SUCCESS
+                        , response
+                ));
+    }
 
     // 유저 본인의 리스트 서랍 조회(모든 리스트 상태 조회)
     @GetMapping("/listbox/listUserSeq")
