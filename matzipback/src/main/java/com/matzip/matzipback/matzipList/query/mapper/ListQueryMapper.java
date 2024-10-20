@@ -13,9 +13,7 @@ public interface ListQueryMapper {
 
 
 
-    List<ListSearchAllDTO> getListBox(long listUserSeq);
-
-    List<ListSearchUserDTO> getUserListBox(Long listUserSeq);
+    List<ListSearchUserDTO> getListBox(int offset, Integer size, Long listUserSeq);
 
     List<ListContentDTO> getListContests(Long listSeq);
 
