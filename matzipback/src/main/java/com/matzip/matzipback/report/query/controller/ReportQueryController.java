@@ -33,10 +33,16 @@ public class ReportQueryController {
         log.info("GET /back/api/v1/report/reason - 신고사유 조회 요청");
         List<ReasonDTO> reasons = reportQueryService.getAllReasons();
 
-        try { if (CustomUserUtils.getCurrentUserAuthorities().iterator().next().getAuthority().equals("admin")) {
-            return ResponseEntity.ok(reasons);
-        } else { throw new RestApiException(FORBIDDEN_ACCESS); }
-        } catch (NullPointerException e) { throw new RestApiException(UNAUTHORIZED_REQUEST); }
+        try {
+            if (CustomUserUtils.getCurrentUserAuthorities().iterator().next().getAuthority().equals("admin")) {
+                return ResponseEntity.ok(reasons);
+            } else {
+                throw new RestApiException(FORBIDDEN_ACCESS);
+            }
+        } catch (NullPointerException e) {
+            throw new RestApiException(UNAUTHORIZED_REQUEST);
+        }
+    }
 
     @GetMapping("/report")
     @Operation(summary = "신고 검색 및 조회", description = "신고를 검색 및 조회한다.")
