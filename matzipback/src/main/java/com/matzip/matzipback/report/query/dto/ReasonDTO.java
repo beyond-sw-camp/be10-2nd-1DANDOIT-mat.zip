@@ -7,4 +7,5 @@ import lombok.Setter;
 public class ReasonDTO {
     private Long reasonSeq;
     private String reasonName;
+    private int reasonOrder;
 }

@@ -49,28 +49,4 @@ public class Report {
         this.reportStatus = "penalty";
     }
 
-    /*@ManyToOne
-    @JoinColumn(name = "post_seq")
-    private Post postSeq; // 게시글과의 관계
-
-    @ManyToOne
-    @JoinColumn(name = "post_comment_seq")
-    private PostComment postCommentSeq; // 게시글 댓글과의 관계
-
-    @ManyToOne
-    @JoinColumn(name = "list_seq")
-    private MyList listSeq; // 리스트와의 관계
-
-    @ManyToOne
-    @JoinColumn(name = "list_comment_seq")
-    private MyListComment listCommentSeq; // 리스트 댓글과의 관계\
-
-    @ManyToOne
-    @JoinColumn(name = "message_seq")
-    private Messages messageSeq;
-
-    @ManyToOne
-    @JoinColumn(name = "review_seq")
-    private Review reviewSeq;*/
-
 }

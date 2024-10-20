@@ -17,12 +17,4 @@ public class ReportReason {
     private Long  reasonSeq;
 
 
-    /*@ManyToOne
-    @JoinColumn(name = "report_seq", referencedColumnName = "reportSeq")
-    private Report report; // 신고와의 관계
-
-    @ManyToOne
-    @JoinColumn(name = "reason_code", referencedColumnName = "reasonCode")
-    private Reason reasonCode; // 신고 사유 코드*/
-
 }
