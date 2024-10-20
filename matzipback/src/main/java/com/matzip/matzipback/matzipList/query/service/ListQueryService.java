@@ -16,7 +16,7 @@ public class ListQueryService {
     private final ListQueryMapper listQueryMapper;
 
     // 리스트 전체 조회
-    @Transactional
+    @Transactional(readOnly = true)
     public ListAllResponse getAllList(Integer page, Integer size){
 
         // offset: 몇번째 페이지를 펼지 설정
@@ -35,7 +35,7 @@ public class ListQueryService {
     }
 
     // 유저 본인의 리스트 박스 조회
-    @Transactional
+    @Transactional(readOnly = true)
     public ListBoxResponse getListBox(Integer page, Integer size, Long listUserSeq) {
 
         // offset: 몇번째 페이지를 펼지 설정
@@ -55,7 +55,7 @@ public class ListQueryService {
     }
 
     // 리스트 상세 조회
-//    @Transactional
+    @Transactional(readOnly = true)
     public List<ListContentDTO> getListContests(Long listSeq) {
         return listQueryMapper.getListContests(listSeq);
     }
@@ -79,5 +79,12 @@ public class ListQueryService {
                 .totalPages((int) Math.ceil((double)totalLists / size))
                 .totalLists(totalLists)
                 .build();
+    }
+
+    // 인기 리스트 조회
+    @Transactional(readOnly = true)
+    public List<ListSearchDTO> getPopularList() {
+        List<ListSearchDTO> popularList = listQueryMapper.getPopularList();
+        return popularList;
     }
 }
