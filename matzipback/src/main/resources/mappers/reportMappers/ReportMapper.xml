@@ -4,6 +4,16 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.matzip.matzipback.report.query.mapper.ReportMapper">
 
+    <!-- 신고사유 조회 -->
+    <select id="getAllReasons" resultType="com.matzip.matzipback.report.query.dto.ReasonDTO">
+        SELECT
+        reason_seq,
+        reason_name,
+        reason_order
+        FROM reasons
+        ORDER BY reason_order ASC
+    </select>
+
     <!-- 신고 검색 및 조회 -->
     <select id="selectReports" resultType="com.matzip.matzipback.report.query.dto.ReportDTO">
         SELECT

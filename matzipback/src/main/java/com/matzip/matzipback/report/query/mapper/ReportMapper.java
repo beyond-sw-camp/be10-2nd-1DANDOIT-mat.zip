@@ -10,6 +10,9 @@ import java.util.List;
 @Mapper
 public interface ReportMapper {
 
+    // 신고사유 조회
+    List<ReasonDTO> getAllReasons();
+
     List<ReportDTO> selectReports(
             @Param("offset") int offset,
             @Param("limit") int limit,

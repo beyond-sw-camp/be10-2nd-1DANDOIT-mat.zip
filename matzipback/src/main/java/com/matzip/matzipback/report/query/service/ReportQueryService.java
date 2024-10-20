@@ -2,6 +2,7 @@ package com.matzip.matzipback.report.query.service;
 
 import com.matzip.matzipback.exception.ErrorCode;
 import com.matzip.matzipback.exception.RestApiException;
+import com.matzip.matzipback.report.query.dto.ReasonDTO;
 import com.matzip.matzipback.report.query.dto.ReportDTO;
 import com.matzip.matzipback.report.query.dto.ReportListResponse;
 import com.matzip.matzipback.report.query.dto.ReportDetailResponse;
@@ -17,6 +18,11 @@ import java.util.List;
 public class ReportQueryService {
 
     private final ReportMapper reportMapper;
+
+    // 신고 사유 조회
+    public List<ReasonDTO> getAllReasons() {
+        return reportMapper.getAllReasons();
+    }
 
     // 신고 검색 및 조회
     @Transactional(readOnly = true)
