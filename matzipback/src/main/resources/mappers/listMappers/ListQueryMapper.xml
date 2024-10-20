@@ -145,6 +145,24 @@
         WHERE
         l.list_status = 'active'
         ORDER BY
-        l.list_level ASC;
+        listLike DESC;
+    </select>
+
+    <select id="getPopularList" resultMap="ListSearchDTO">
+        SELECT
+        l.list_user_seq,
+        u.user_nickname,
+        l.list_title,
+        l.list_content,
+        (SELECT COUNT(*) FROM `like` k WHERE k.list_seq = l.list_seq) AS like_count
+        FROM
+        lists l
+        LEFT JOIN
+        users u ON l.list_user_seq = u.user_seq
+        WHERE
+        l.list_status = 'active'
+        ORDER BY
+        like_count DESC
+        LIMIT 5;
     </select>
 </mapper>
