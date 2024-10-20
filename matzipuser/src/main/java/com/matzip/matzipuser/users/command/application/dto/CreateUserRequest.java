@@ -25,5 +25,7 @@ public class CreateUserRequest {
     @NotBlank(message = "휴대폰 번호는 필수 입력 사항입니다.")
     private String userPhone;
 
+    private String userNickname;  // 선택 입력
+
     private String userSocialYn = "N";  // 기본 회원가입
 }

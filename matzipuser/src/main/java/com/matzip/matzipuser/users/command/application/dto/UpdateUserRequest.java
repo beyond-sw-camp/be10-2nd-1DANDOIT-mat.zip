@@ -12,7 +12,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UpdateUserRequest {
 
-    private long userSeq;
     private String userPassword;
 //    @Pattern(regexp = "^[0-9]{10,11}$", message = "휴대폰 번호는 10자리 또는 11자리 숫자여야 합니다.")
     private String userPhone;
