@@ -15,13 +15,24 @@ public class ListQueryService {
 
     private final ListQueryMapper listQueryMapper;
 
-    public List<ListSearchAllDTO> getListBox(Long listUserSeq) {
-        return listQueryMapper.getListBox(listUserSeq);
-    }
+    @Transactional
+    public ListBoxResponse getListBox(Integer page, Integer size, Long listUserSeq) {
 
-//    public List<ListSearchUserDTO> getUserListBox(Long listUserSeq) {
-//        return listQueryMapper.getUserListBox(listUserSeq);
-//    }
+        // offset: 몇번째 페이지를 펼지 설정
+        int offset = (page - 1) * size;
+
+        List<ListSearchUserDTO> ListBox = listQueryMapper.getListBox(offset, size, listUserSeq);
+
+        Long totalLists = listQueryMapper.countListsByListUserSeq(listUserSeq);
+
+        return ListBoxResponse.builder()
+                        .
+                listSearchUserDTOs(ListBox)
+                .currentPage(page)
+                .totalPages((int) Math.ceil((double)totalLists / size))
+                .totalLists(totalLists)
+                .build();
+    }
 
 
     public List<ListContentDTO> getListContests(Long listSeq) {
