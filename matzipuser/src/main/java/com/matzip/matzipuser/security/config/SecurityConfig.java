@@ -8,6 +8,7 @@ import com.matzip.matzipuser.security.handler.LoginFailureHandler;
 import com.matzip.matzipuser.security.handler.LoginSuccessHandler;
 import com.matzip.matzipuser.security.util.CustomUserDetailService;
 import com.matzip.matzipuser.security.util.JwtUtil;
+import com.matzip.matzipuser.users.query.service.UsersInfoService;
 import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +32,7 @@ public class SecurityConfig {
 
     private final BCryptPasswordEncoder passwordEncoder;
     private final CustomUserDetailService userDetailService;
+    private final UsersInfoService usersInfoService;
     private final Environment env;
     private final JwtUtil jwtUtil;
 
@@ -80,7 +82,7 @@ public class SecurityConfig {
     private Filter getAuthenticationFilter() {
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter();
         customAuthenticationFilter.setAuthenticationManager(getAuthenticationManager());
-        customAuthenticationFilter.setAuthenticationSuccessHandler(new LoginSuccessHandler(env));
+        customAuthenticationFilter.setAuthenticationSuccessHandler(new LoginSuccessHandler(env, usersInfoService));
         customAuthenticationFilter.setAuthenticationFailureHandler(new LoginFailureHandler());
 
         return customAuthenticationFilter;

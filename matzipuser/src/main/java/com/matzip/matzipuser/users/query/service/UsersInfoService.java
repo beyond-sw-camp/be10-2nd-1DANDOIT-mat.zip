@@ -126,7 +126,7 @@ public class UsersInfoService {
         return usersInfoMapper.getUserByUserSeq(userSeq);
     }
 
-    public String getUserStatus(Long userSeq) {
+    public UserStatusDTO getUserStatus(Long userSeq) {
         return usersInfoMapper.getUserStatus(userSeq);
     }
 }

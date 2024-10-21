@@ -1,9 +1,6 @@
 package com.matzip.matzipuser.users.query.mapper;
 
-import com.matzip.matzipuser.users.query.dto.userInfo.OtherUserInfoDto;
-import com.matzip.matzipuser.users.query.dto.userInfo.UserDetailInfoDTO;
-import com.matzip.matzipuser.users.query.dto.userInfo.UserInfoDTO;
-import com.matzip.matzipuser.users.query.dto.userInfo.UserTokenDTO;
+import com.matzip.matzipuser.users.query.dto.userInfo.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -65,6 +62,6 @@ public interface UsersInfoMapper {
     // email로 인증을 위한 정보 찾기
     UserTokenDTO getUserByEmail(String email);
 
-    String getUserStatus(
+    UserStatusDTO getUserStatus(
             @Param("userSeq") Long userSeq);
 }
