@@ -26,7 +26,7 @@ public class ListQueryController {
     private final ListQueryService listQueryService;
 
     // 리스트 전체 조회
-    @GetMapping("/listbox/all")
+    @GetMapping("/listbox")
     @Operation(summary = "모든 리스트 조회", description = "모든 리스트를 조회한다.")
     public ResponseEntity<SuccessSearchResMessage<?>> listBoxAll(
             @RequestParam(defaultValue = "1") Integer page,
@@ -43,7 +43,7 @@ public class ListQueryController {
     }
 
     // 인기 리스트 조회
-    @GetMapping("/listBox/popularList")
+    @GetMapping("/listBox/top")
     @Operation(summary = "인기 리스트 조회", description = "인기리스트를 조회한다.")
     public ResponseEntity<SuccessSearchResMessage<?>> getPopularList(){
 
