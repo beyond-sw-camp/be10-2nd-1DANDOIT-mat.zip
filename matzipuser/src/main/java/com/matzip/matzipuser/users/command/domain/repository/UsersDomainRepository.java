@@ -13,9 +13,13 @@ public interface UsersDomainRepository {
 
     boolean existsByUserEmail(String userEmail); // 이메일 중복체크
 
-    boolean existsByUserNickname(String userNickname);
+    boolean existsByUserNickname(String userNickname); // 닉네임 중복체크
+
+    boolean existsByUserPhone(String userPhone); // 휴대폰 중복체크
 
     Optional<Users> findById(Long userSeq);
 
-    void delete(Users user);
+    void delete(Users user); // 회원탈퇴
+
+    Optional<Users> findByUserNameAndUserPhone(String userName, String userPhone); // 이메일 찾기
 }
