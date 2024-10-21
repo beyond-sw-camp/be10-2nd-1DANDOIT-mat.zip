@@ -1,22 +1,21 @@
 package com.matzip.matzipuser.users.command.application.service;
 
+import com.matzip.matzipuser.exception.ErrorCode;
 import com.matzip.matzipuser.exception.RestApiException;
-import com.matzip.matzipuser.users.command.application.dto.UpdateUserActivityPointDTO;
+import com.matzip.matzipuser.users.command.application.dto.*;
 import com.matzip.matzipuser.users.command.application.utility.UUIDGenerator;
 import com.matzip.matzipuser.users.command.domain.aggregate.Users;
 import com.matzip.matzipuser.users.command.domain.repository.UsersDomainRepository;
 import com.matzip.matzipuser.users.command.domain.service.UserActivityDomainService;
-import com.matzip.matzipuser.users.command.application.dto.CreateUserRequest;
-import com.matzip.matzipuser.users.command.application.dto.DeleteUserRequest;
-import com.matzip.matzipuser.users.command.application.dto.UpdateUserRequest;
 import com.matzip.matzipuser.users.command.domain.service.UsersDomainService;
-import com.matzip.matzipuser.users.command.application.dto.UpdateUserStatusDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.matzip.matzipuser.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -53,14 +52,17 @@ public class UsersCommandService {
             throw new IllegalArgumentException("이메일 인증이 완료되지 않았습니다. 인증을 먼저 진행해주세요.");
         }
 
-        // 휴대폰 인증 확인
-//        if (!authService.verifyPhoneAuthCode(newUser.getUserPhone())) {
-//            throw new IllegalArgumentException("휴대폰 인증에 실패했습니다.");
-//        }
+        // 휴대폰 증복 체크
+        log.info("========휴대폰 번호 중복 확인========");
+        if(isPhoneDuplicated(newUser.getUserPhone())) {
+            throw new RestApiException(USER_PHONE_ALREADY_EXISTS);
+        }
 
         // 닉네임 중복 체크 (사용자가 입력한 경우)
-        if (newUser.getUserNickname() != null && !newUser.getUserNickname().trim().isEmpty()) {
-            checkNicknameDuplication(newUser.getUserNickname());
+        if (newUser.getUserNickname() != null && !newUser.getUserNickname().trim().isBlank()) {
+            if (isNicknameDuplicated(newUser.getUserNickname())) {
+                throw new RestApiException(NICKNAME_ALREADY_EXISTS);
+            }
         }
 
         // CreateUserRequest DTO를 Users 엔티티로 변환
@@ -72,7 +74,7 @@ public class UsersCommandService {
 
         // 닉네임이 없는 경우 자동 생성
         if (newUser.getUserNickname() == null || newUser.getUserNickname().isBlank()) {
-            log.info("========닉네임 자동 생성========");
+//            log.info("========닉네임 자동 생성========");
             String nickname = createUniqueNickname();
             users.updateNickname(nickname);
         } else {
@@ -92,22 +94,28 @@ public class UsersCommandService {
     }
 
     /* 회원가입시 닉네임 임의자동생성을 위한 메소드 */
-    private String createUniqueNickname(){
-        log.info("========닉네임 중복체크 후 생성========");
+    private String createUniqueNickname() {
+//        log.info("========닉네임 중복체크 후 생성========");
         String nickname;
         do {
             nickname = uuidGenerator.createRandomNickname();
-        } while (usersDomainRepository.existsByUserNickname(nickname));
+            if (!isNicknameDuplicated(nickname)) {
+                break; // 중복이 없으면 루프를 종료
+            } else {
+//                log.debug("중복된 닉네임 발견 : {}", nickname);
+            }
+        } while (true);
         return nickname;
     }
 
     /* 닉네임 중복체크 메소드 */
-    public void checkNicknameDuplication(String nickname) {
-        log.info("========닉네임 중복체크========");
-        if (usersDomainRepository.existsByUserNickname(nickname)) {
-            throw new IllegalArgumentException("이미 사용 중인 닉네임입니다. 다른 닉네임을 선택해주세요.");
-//            throw new RestApiException(ErrorCode.NICKNAME_ALREADY_EXISTS);
-        }
+    public boolean isNicknameDuplicated(String nickname) {
+        return usersDomainRepository.existsByUserNickname(nickname);
+    }
+
+    /* 휴대폰 번호 중복체크 메소드 */
+    public boolean isPhoneDuplicated(String phone) {
+        return usersDomainRepository.existsByUserPhone(phone);
     }
 
     /* 회원정보 수정 - 닉네임, 휴대폰, 비밀번호 */
@@ -124,12 +132,14 @@ public class UsersCommandService {
         // 닉네임 수정
         if (updateUserInfo.getUserNickname() != null && !updateUserInfo.getUserNickname().trim().isBlank()) {
             if (updateUserInfo.getUserNickname().equals(user.getUserNickname())) {  // 수정 전/후 비교
-                throw new IllegalArgumentException("현재 닉네임과 동일한 닉네임으로는 변경할 수 없습니다.");
+                throw new RestApiException(NOT_UPDATED_NICKNAME);
             }
-            // 중복 체크 메서드 호출
-            checkNicknameDuplication(updateUserInfo.getUserNickname());
+            // 중복 체크
+            if (isNicknameDuplicated(updateUserInfo.getUserNickname())) {
+                throw new RestApiException(NICKNAME_ALREADY_EXISTS);
+            }
 
-            log.info("========닉네임 중복체크 후 수정완료 - UserNickname: {}========", updateUserInfo.getUserNickname());
+//            log.info("========닉네임 중복체크 후 수정완료 - UserNickname: {}========", updateUserInfo.getUserNickname());
             user.updateNickname(updateUserInfo.getUserNickname());
         }
 
@@ -141,13 +151,17 @@ public class UsersCommandService {
             // 비밀번호 암호화
             String encryptedPassword = passwordEncoder.encode(updateUserInfo.getUserPassword());
             user.encryptPassword(encryptedPassword);
-            log.info("========비밀번호 수정 후 재암호화========");
+//            log.info("========비밀번호 수정 후 재암호화========");
         }
 
         // 휴대폰 번호 수정(추가 본인인증은 나중에 구현)
         if (updateUserInfo.getUserPhone() != null  && !updateUserInfo.getUserPhone().isBlank()) {
+            if(isPhoneDuplicated(updateUserInfo.getUserPhone())) {
+                throw new RestApiException(USER_PHONE_ALREADY_EXISTS);
+            }
+
             user.updatePhone(updateUserInfo.getUserPhone());
-            log.info("========휴대폰 번호 수정완료 - UserPhone: {}========", updateUserInfo.getUserPhone());
+//            log.info("========휴대폰 번호 수정완료 - UserPhone: {}========", updateUserInfo.getUserPhone());
         }
 
         // Users 엔티티 저장
@@ -180,4 +194,37 @@ public class UsersCommandService {
 
         usersDomainService.updateUserStatus(updateUserStatusDTO);
     }
+
+    // 이메일 찾기
+    @Transactional
+    public String findEmail(FindEmailRequest request) {
+//        log.info("========이메일 찾기 서비스 진입========");
+
+        // 전달된 이름과 번호로 사용자 조회
+        Users user = usersDomainRepository.findByUserNameAndUserPhone(request.getUserName(), request.getUserPhone())
+                .orElseThrow(() -> new RestApiException(NOT_FOUND));
+
+        // 이메일 마스킹처리
+        String maskedEmail = maskingEmail(user.getUserEmail());
+//        log.info("========이메일 마스킹 처리 완료: {}========", maskingEmail);
+
+        return maskedEmail;
+    }
+
+    // 이메일 마스킹처리 메소드
+    private String maskingEmail(String email) {
+//        log.info("========이메일 마스킹 서비스 진입========");
+
+        int atIndex = email.indexOf("@");
+
+        if (atIndex <= 3) { // id가 3자 이하일때
+            // 첫 번째 글자만 노출하고 나머지는 *** 처리
+            String visiblePart = email.substring(0, 1);
+            return visiblePart + "***" + email.substring(atIndex);
+        }
+
+        String id = email.substring(0, 3);
+        return id + "***" + email.substring(atIndex);
+    }
+
 }
