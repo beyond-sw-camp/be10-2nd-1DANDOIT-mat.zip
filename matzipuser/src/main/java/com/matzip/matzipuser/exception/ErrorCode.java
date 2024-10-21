@@ -52,8 +52,19 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Server error."),
 
     /* 저장 실패 */
-    NOT_UPDATED(HttpStatus.CONFLICT, "Not updated.");
+    NOT_UPDATED(HttpStatus.CONFLICT, "Not updated."),
 
+    /* 닉네임 중복 */
+    NICKNAME_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 사용 중인 닉네임입니다. 다른 닉네임을 선택해주세요."),
+
+    /* 휴대폰번호 중복 */
+    USER_PHONE_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 사용 중인 번호입니다."),
+
+    /* 이메일 발송 실패 */
+    SEND_MAIL_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "메일 발송에 실패했습니다."),
+
+    /* 이메일 인증시간 만료 */
+    EXPIRE_VERIFICATION_CODE(HttpStatus.NOT_FOUND, "인증시간이 만료되었습니다. 다시 요청해주세요.");
 
     private final HttpStatus httpStatus;
     private final String message;
