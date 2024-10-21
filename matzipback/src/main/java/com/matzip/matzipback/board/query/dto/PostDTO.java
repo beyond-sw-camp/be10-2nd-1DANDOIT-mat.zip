@@ -14,6 +14,7 @@ public class PostDTO {
     private String postTitle;                   // 게시글 제목
     private String postContent;                 // 게시글 내용
     private String userNickname;                // 게시글 작성자 닉네임
+    private Long postUserSeq;                       // 게시글 작성자 고유번호
     private LocalDateTime postCreatedTime;      // 게시글 생성 시간
     private LocalDateTime postUpdatedTime;      // 게시글 수정 시간
 
