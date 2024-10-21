@@ -52,18 +52,16 @@ public class ListCommandService {
 
     // 리스트 삭제
     @Transactional
-    public void deleteList(DeleteListRequest deleteListRequest) {
-        listDomainRepository.deleteById(deleteListRequest.getListSeq());
+    public void deleteList(Long listSeq, DeleteListRequest deleteListRequest) {
+        listDomainRepository.deleteById(listSeq);
 
-        if (CustomUserUtils.getCurrentUserAuthorities().iterator().next().getAuthority().equals("user")) {
-            if (!CustomUserUtils.getCurrentUserSeq().equals(deleteListRequest.getListUserSeq())) {
-                throw new RestApiException(FORBIDDEN_ACCESS);
-            }
+        if (!CustomUserUtils.getCurrentUserSeq().equals(deleteListRequest.getListUserSeq())) {
+            throw new RestApiException(FORBIDDEN_ACCESS);
         }
 
         // 리스트 삭제 시 점수 삭제(-3점)
         MyList listUser = listDomainRepository
-                .findByListSeq(deleteListRequest.getListSeq()).orElseThrow(() -> new RestApiException(ErrorCode.NOT_FOUND));
+                .findByListSeq(listSeq).orElseThrow(() -> new RestApiException(ErrorCode.NOT_FOUND));
         userActivityFeignClient.updateUserActivityPoint(
                 new UpdateUserActivityPointDTO(listUser.getListUserSeq(), -3));
     }
