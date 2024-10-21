@@ -16,6 +16,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import static com.matzip.matzipback.exception.ErrorCode.FORBIDDEN_ACCESS;
+
 @Service
 @RequiredArgsConstructor
 public class ListCommandService {
@@ -52,6 +54,12 @@ public class ListCommandService {
     @Transactional
     public void deleteList(DeleteListRequest deleteListRequest) {
         listDomainRepository.deleteById(deleteListRequest.getListSeq());
+
+        if (CustomUserUtils.getCurrentUserAuthorities().iterator().next().getAuthority().equals("user")) {
+            if (!CustomUserUtils.getCurrentUserSeq().equals(deleteListRequest.getListUserSeq())) {
+                throw new RestApiException(FORBIDDEN_ACCESS);
+            }
+        }
 
         // 리스트 삭제 시 점수 삭제(-3점)
         MyList listUser = listDomainRepository
