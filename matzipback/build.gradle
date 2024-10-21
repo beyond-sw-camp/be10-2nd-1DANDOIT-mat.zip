@@ -71,6 +71,10 @@ dependencies {
 
     // 파일 업로드 기능에 사용하는 라이브러리
     implementation 'commons-io:commons-io:2.11.0'
+
+    // 게시글 에디터 사용 시 사진 업로드 기능에 사용하는 라이브러리
+    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+    implementation 'com.google.code.gson:gson:2.10.1'
 }
 
 dependencyManagement {
