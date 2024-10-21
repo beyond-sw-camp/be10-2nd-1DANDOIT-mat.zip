@@ -8,6 +8,7 @@
         SELECT
                b.board_category_name
              , a.post_title
+             , a.post_user_seq
              , c.user_nickname
              , a.post_created_time
              , a.post_updated_time
@@ -19,7 +20,7 @@
             AND a.post_title LIKE CONCAT('%', #{postTitle}, '%')
         </if>
         <if test="userNickname != null">
-            AND c.user_nickname LIKE CONCAT('%', #{userNickname})
+            AND c.user_nickname LIKE CONCAT('%', #{userNickname}, '%')
         </if>
         ORDER BY a.post_seq
         LIMIT #{size} OFFSET #{offset}
@@ -36,7 +37,7 @@
             AND a.post_title LIKE CONCAT('%', #{postTitle}, '%')
         </if>
         <if test="userNickname != null">
-            AND c.user_nickname LIKE CONCAT('%', #{userNickname})
+            AND c.user_nickname LIKE CONCAT('%', #{userNickname}, '%')
         </if>
     </select>
 
@@ -44,6 +45,7 @@
         SELECT
                b.board_category_name
              , a.post_title
+             , a.post_user_seq
              , c.user_nickname
              , a.post_created_time
              , a.post_updated_time
@@ -76,6 +78,7 @@
                 b.board_category_name
               , a.post_title
               , a.post_content
+              , a.post_user_seq
               , c.user_nickname
               , a.post_created_time
               , a.post_updated_time
@@ -129,10 +132,11 @@
     <select id="getPostComment" resultType="com.matzip.matzipback.board.query.dto.PostCommentDTO">
         SELECT
                 a.post_comment_seq
+              , a.post_comment_user_seq
               , c.user_nickname
               , a.post_comment_content
-              , a.post_comment_created_time as createdTime
-              , a.post_comment_updated_time as lastUpdateTime
+              , a.post_comment_created_time
+              , a.post_comment_updated_time
           FROM post_comment a
          RIGHT JOIN post b USING (post_seq)
           LEFT JOIN users c ON (a.post_comment_user_seq = c.user_seq)

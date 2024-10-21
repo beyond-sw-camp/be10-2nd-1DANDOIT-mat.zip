@@ -13,6 +13,7 @@ public class PostCommentDTO {
     private Long postSeq;
     private String postTitle;
     private String postCommentContent;
+    private Long postCommentUserSeq;
     private String userNickname;
     private LocalDateTime postCommentCreatedTime;
     private LocalDateTime postCommentUpdatedTime;
