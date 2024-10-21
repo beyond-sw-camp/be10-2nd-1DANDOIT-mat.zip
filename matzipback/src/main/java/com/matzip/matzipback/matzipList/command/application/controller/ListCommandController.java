@@ -34,11 +34,11 @@ public class ListCommandController {
     }
 
     // 리스트 삭제
-    @DeleteMapping("/list")
+    @DeleteMapping("/list/{listSeq}")
     @Operation(summary = "리스트 삭제", description = "리스트를 삭제한다.")
-    public ResponseEntity<SuccessResMessage> deleteList(@Valid @RequestBody DeleteListRequest deleteListRequest){
+    public ResponseEntity<SuccessResMessage> deleteList(@Valid Long listSeq, @Valid @RequestBody DeleteListRequest deleteListRequest){
 
-        listCommandService.deleteList(deleteListRequest);
+        listCommandService.deleteList(listSeq, deleteListRequest);
 
         return ResponseEntity.ok(new SuccessResMessage(SuccessCode.BASIC_DELETE_SUCCESS));
     }
