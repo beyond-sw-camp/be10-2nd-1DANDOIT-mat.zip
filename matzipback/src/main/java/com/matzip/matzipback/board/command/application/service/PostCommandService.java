@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import static com.matzip.matzipback.exception.ErrorCode.FORBIDDEN_ACCESS;
 import static com.matzip.matzipback.exception.ErrorCode.NOT_FOUND;
 
 
@@ -64,8 +65,14 @@ public class PostCommandService {
     @Transactional
     public void updatePost(Long postSeq, PostAndTagRequestDTO updatedPost) {
 
+        // 원본 게시글 가져오기
         Post post = postRepository.findById(postSeq)
                 .orElseThrow(() -> new RestApiException(NOT_FOUND));     // 조회 된 Post 엔티티가 없을 경우
+
+        // 수정 권한 검증
+        if (!CustomUserUtils.getCurrentUserSeq().equals(post.getPostUserSeq())) {
+            throw new RestApiException(FORBIDDEN_ACCESS);
+        }
 
         // 이미 soft delete 된 게시글의 경우
         if(post.getPostStatus().equals("delete")){
@@ -101,6 +108,13 @@ public class PostCommandService {
 
         // 전달 된 postSeq로 Post Entity 조회
         Post post = postRepository.findById(postSeq).orElseThrow(() -> new RestApiException(NOT_FOUND));
+
+        // 삭제 권한 검증
+        if (CustomUserUtils.getCurrentUserAuthorities().iterator().next().getAuthority().equals("user")) {
+            if (!CustomUserUtils.getCurrentUserSeq().equals(post.getPostUserSeq())) {
+                throw new RestApiException(FORBIDDEN_ACCESS);
+            }
+        }
 
         // 이미 soft delete 된 게시글의 경우
         if(post.getPostStatus().equals("delete")){
