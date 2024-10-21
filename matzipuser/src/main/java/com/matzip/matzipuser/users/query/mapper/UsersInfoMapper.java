@@ -65,4 +65,6 @@ public interface UsersInfoMapper {
     // email로 인증을 위한 정보 찾기
     UserTokenDTO getUserByEmail(String email);
 
+    String getUserStatus(
+            @Param("userSeq") Long userSeq);
 }

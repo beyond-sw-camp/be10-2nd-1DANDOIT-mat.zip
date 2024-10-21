@@ -1,5 +1,7 @@
 package com.matzip.matzipuser.security.handler;
 
+import com.matzip.matzipuser.users.query.dto.userInfo.UserStatusDTO;
+import com.matzip.matzipuser.users.query.service.UsersInfoService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -22,11 +24,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
-
     private final Environment env;
+    private UsersInfoService usersInfoService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+
+        // 탈퇴한 사용자나 정지당한 사용자의 로그인 차단
+
         /* 권한을 꺼내 List<String> 으로 변환 */
         List<String> authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)

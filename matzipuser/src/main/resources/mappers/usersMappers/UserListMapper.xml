@@ -516,5 +516,13 @@
          WHERE user_email = #{email}
     </select>
 
+    <select id="getUserStatus" resultType="com.matzip.matzipuser.users.query.dto.userInfo.UserStatusDTO">
+        SELECT
+            user_status,
+            user_delete_date
+        FROM users
+        WHERE
+            user_seq = #{userSeq}
+    </select>
 
 </mapper>
