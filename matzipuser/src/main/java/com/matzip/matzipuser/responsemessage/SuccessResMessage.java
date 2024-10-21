@@ -19,4 +19,10 @@ public class SuccessResMessage {
         this.success = successCode.getHttpStatus().name();
         this.message = successCode.getMessage();
     }
+
+    public SuccessResMessage(SuccessCode successCode, String additionalMessage) {
+        this.statusCode = successCode.getHttpStatus().value();
+        this.success = successCode.getHttpStatus().name();
+        this.message = additionalMessage; // 추가적인 메시지 사용
+    }
 }
