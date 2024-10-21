@@ -68,15 +68,21 @@ public class ListCommandService {
                 new UpdateUserActivityPointDTO(listUser.getListUserSeq(), -3));
     }
 
-
-    // 리스트 수정
+//     리스트 수정
     @Transactional
-    public Long updateList(UpdateListRequest updateListRequest) {
+    public Long updateList(Long listSeq, UpdateListRequest updateListRequest) {
 
         //로그인한 사람의 유저 시퀀스를 가져오는 기능(권한이 들어있는 유저 시퀀스)
         Long listUserSeq = CustomUserUtils.getCurrentUserSeq();
 
-        return domainListUpdateService.updateList(updateListRequest, listUserSeq);
+        if (CustomUserUtils.getCurrentUserAuthorities().iterator().next().getAuthority().equals("user")) {
+            if (!CustomUserUtils.getCurrentUserSeq().equals(updateListRequest.getListUserSeq())) {
+                throw new RestApiException(FORBIDDEN_ACCESS);
+            }
+        }
+
+
+        return domainListUpdateService.updateList(listSeq, updateListRequest, listUserSeq);
 
     }
 

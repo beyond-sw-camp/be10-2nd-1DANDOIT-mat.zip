@@ -11,16 +11,16 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 public class UpdateListRequest {
-    @NotNull(message = "리스트 고유번호가 Null이면 안됩니다.")
-    private Long listSeq;
+    @NotNull(message = "리스트 작성자 고유번호가 Null이면 안됩니다.")
+    private Long listUserSeq;
     @NotBlank(message = "리스트 제목이 Blank이면 안됩니다.")
     private String listTitle;
     @NotBlank(message = "리스트 내용이 Blank이면 안됩니다.")
     private String listContent;
 
 
-    public UpdateListRequest(long listSeq, String listTitle, String listContent) {
-        this.listSeq = listSeq;
+    public UpdateListRequest(long listUserSeq, String listTitle, String listContent) {
+        this.listUserSeq = listUserSeq;
         this.listTitle = listTitle;
         this.listContent = listContent;
     }

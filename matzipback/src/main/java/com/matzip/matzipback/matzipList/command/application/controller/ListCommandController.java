@@ -44,11 +44,13 @@ public class ListCommandController {
     }
 
     // 리스트 수정
-    @PutMapping("/list")
+    @PutMapping("/list/{listSeq}")
     @Operation(summary = "리스트 수정", description = "리스트를 수정한다.")
-    public ResponseEntity<SuccessResMessage> updateList(@Valid @RequestBody UpdateListRequest updateListRequest){
+    public ResponseEntity<SuccessResMessage> updateList(
+            @Valid @PathVariable Long listSeq,
+            @Valid @RequestBody UpdateListRequest updateListRequest){
 
-        listCommandService.updateList(updateListRequest);
+        listCommandService.updateList(listSeq, updateListRequest);
 
         return ResponseEntity.ok(new SuccessResMessage(SuccessCode.BASIC_UPDATE_SUCCESS));
     }
