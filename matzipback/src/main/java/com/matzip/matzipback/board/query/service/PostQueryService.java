@@ -98,7 +98,18 @@ public class PostQueryService {
                 .build();
     }
 
-    /* 4. 게시판 별 인기 태그 조회 */
+    /* 4. 게시글에 등록된 최근 200개의 태그 중 많이 쓰인 상위 10개 태그 조회 */
+    @Transactional(readOnly = true)
+    public PopularTagResponse getTop10Tags() {
+
+        List<String> top10Tags = postMapper.getTop10Tags();
+
+        return PopularTagResponse.builder()
+                .tags(top10Tags)
+                .build();
+    }
+
+    /* 5. 게시판 별 인기 태그 조회 */
     @Transactional(readOnly = true)
     public PopularTagResponse getPopularTag(Long boardSeq) {
 
@@ -109,7 +120,7 @@ public class PostQueryService {
                 .build();
     }
 
-    /* 5. 게시글 등록 페이지에서 태그 작성 시 관련 인기 키워드 제시 */
+    /* 6. 게시글 등록 페이지에서 태그 작성 시 관련 인기 키워드 제시 */
     @Transactional(readOnly = true)
     public PopularTagResponse getTagKeywords(String tag) {
         List<String> tags = postMapper.getTagKeywords(tag);
@@ -118,4 +129,5 @@ public class PostQueryService {
                 .tags(tags)
                 .build();
     }
+
 }
