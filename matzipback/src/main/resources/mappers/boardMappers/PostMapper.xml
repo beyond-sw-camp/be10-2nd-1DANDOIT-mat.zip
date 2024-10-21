@@ -143,6 +143,20 @@
          WHERE post_seq = #{postSeq}
     </select>
 
+    <select id="getTop10Tags" resultType="String">
+        SELECT recent_posts.tag_name
+          FROM (SELECT a.post_seq, a.post_title, a.post_status, a.post_created_time, b.post_tag_seq, c.tag_name
+                  FROM post a
+                  JOIN post_tag b USING (post_seq)
+                  JOIN tags c ON (b.tag_seq = c.tag_seq)
+                 WHERE post_status = 'active'
+                 ORDER BY post_created_time DESC
+                 LIMIT 200) AS recent_posts
+         GROUP BY recent_posts.tag_name
+         ORDER BY COUNT(recent_posts.tag_name) DESC
+         LIMIT 10;
+    </select>
+
     <select id="getPopularTag" resultType="String">
         SELECT
                a.tag_name

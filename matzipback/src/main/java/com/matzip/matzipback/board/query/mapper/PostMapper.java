@@ -31,4 +31,6 @@ public interface PostMapper {
     List<String> getPopularTag(Long boardSeq);
 
     List<String> getTagKeywords(String tag);
+
+    List<String> getTop10Tags();
 }
