@@ -2,6 +2,7 @@ package com.matzip.matzipuser.users.command.application.controller;
 
 import com.matzip.matzipuser.responsemessage.SuccessCode;
 import com.matzip.matzipuser.responsemessage.SuccessResMessage;
+import com.matzip.matzipuser.users.command.application.dto.FindEmailRequest;
 import com.matzip.matzipuser.users.command.application.service.UsersCommandService;
 import com.matzip.matzipuser.users.command.application.dto.CreateUserRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,7 +29,7 @@ public class UsersAuthController {
     @Operation(summary = "로그아웃 요청", description = "클라이언트에게 토큰삭제를 요청한다.")
     public ResponseEntity<String> logout() {
         // 클라이언트에게 토큰 삭제 요청 안내
-        log.info("POST /api/v1/auth/logout - 로그아웃 요청");
+//        log.info("POST /api/v1/auth/logout - 로그아웃 요청");
         return ResponseEntity.ok("로그아웃되었습니다. 클라이언트는 토큰을 삭제해야 합니다.");
     }
 
@@ -37,9 +38,20 @@ public class UsersAuthController {
     @PostMapping("/register")
     @Operation(summary = "회원가입", description = "이메일, 비밀번호와 이름, 휴대폰번호를 입력 후 회원가입이 가능하다.")
     public ResponseEntity<SuccessResMessage> createUser(@Valid @RequestBody CreateUserRequest newUser) {
-        log.info("GET /user/api/v1/auth/register - 회원가입 요청 createUser: {}", newUser);
+//        log.info("GET /user/api/v1/auth/register - 회원가입 요청 createUser: {}", newUser);
         usersCommandService.createUser(newUser);
 
         return ResponseEntity.ok(new SuccessResMessage(SuccessCode.BASIC_SAVE_SUCCESS));
     }
+
+    /* 이메일 찾기 */
+    @PostMapping("/find-email")
+    @Operation(summary = "이메일 찾기", description = "이름과 휴대폰 번호로 이메일 찾기")
+    public ResponseEntity<SuccessResMessage> findEmail(@Valid @RequestBody FindEmailRequest request) {
+//        log.info("POST /user/api/v1/auth/find-email - 이메일 찾기 요청 findEmailRequest: {}", request);
+        String maskedEmail = usersCommandService.findEmail(request);
+
+        return ResponseEntity.ok(new SuccessResMessage(SuccessCode.FIND_EMAIL_SUCCESS, maskedEmail));
+    }
+
 }
