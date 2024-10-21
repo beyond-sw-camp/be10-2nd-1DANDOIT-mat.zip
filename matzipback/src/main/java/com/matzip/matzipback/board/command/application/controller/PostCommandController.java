@@ -120,15 +120,11 @@ public class PostCommandController {
     public ResponseEntity<SuccessResMessage> deletePost(@PathVariable Long postSeq) {
 
         try{
-            if (CustomUserUtils.getCurrentUserAuthorities().iterator().next().getAuthority().equals("user")) {
+            // 게시글 삭제
+            postCommandService.deletePost(postSeq);
 
-                // 게시글 삭제
-                postCommandService.deletePost(postSeq);
+            return ResponseEntity.ok(new SuccessResMessage(BASIC_DELETE_SUCCESS));
 
-                return ResponseEntity.ok(new SuccessResMessage(BASIC_DELETE_SUCCESS));
-            } else {
-                throw new RestApiException(FORBIDDEN_ACCESS);
-            }
         } catch (NullPointerException e) { throw new RestApiException(UNAUTHORIZED_REQUEST); }
     }
 
