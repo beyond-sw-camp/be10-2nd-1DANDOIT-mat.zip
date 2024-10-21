@@ -15,9 +15,7 @@ public class DomainListUpdateService {
     private final ListDomainRepository listDomainRepository;
 
 
-    public long updateList(UpdateListRequest updateListRequest, long listUserSeq) {
-
-        Long listSeq = updateListRequest.getListSeq();
+    public long updateList(Long listSeq, UpdateListRequest updateListRequest, long listUserSeq) {
 
         MyList existList = listDomainRepository.findById(listSeq)
                 .orElseThrow();
