@@ -43,4 +43,8 @@ public class UserActivity {
         if (this.activityPoint == null) this.activityPoint = 0;
         if (this.activeLevelSeq == null) this.activeLevelSeq = 1L;
     }
+
+    public void resetActivityPoint() {
+        this.activityPoint = 0;
+    }
 }
