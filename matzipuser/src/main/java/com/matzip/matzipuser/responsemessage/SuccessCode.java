@@ -22,8 +22,10 @@ public enum SuccessCode {
     BASIC_GET_SUCCESS(HttpStatus.OK, "조회 성공"),
 
     /* 회원 탈퇴 */
-    USER_DELETION_SUCCESS(HttpStatus.OK, "탈퇴가 성공적으로 처리되었습니다.");
+    USER_DELETION_SUCCESS(HttpStatus.OK, "탈퇴가 성공적으로 처리되었습니다."),
 
+    /* 이메일 찾기 */
+    FIND_EMAIL_SUCCESS(HttpStatus.OK, "이메일 찾기에 성공했습니다.");
 
 
     private final HttpStatus httpStatus;
