@@ -49,7 +49,9 @@ public class ListCmtCommandController {
     public ResponseEntity<SuccessResMessage> deleteListCmt(@Valid @RequestBody DeleteListCmtRequset deleteListCmtRequset){
 
         try { if (CustomUserUtils.getCurrentUserAuthorities().iterator().next().getAuthority().equals("user")) {
-
+            if (!CustomUserUtils.getCurrentUserSeq().equals(deleteListCmtRequset.getListCommentUserSeq())) {
+                throw new RestApiException(FORBIDDEN_ACCESS);
+            }
             listCmtCommandService.deleteListCmt(deleteListCmtRequset);
 
             return ResponseEntity
