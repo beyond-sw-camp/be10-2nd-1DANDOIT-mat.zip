@@ -3,6 +3,8 @@ package com.matzip.matzipuser.users.command.application.controller;
 import com.matzip.matzipuser.responsemessage.SuccessCode;
 import com.matzip.matzipuser.responsemessage.SuccessResMessage;
 import com.matzip.matzipuser.users.command.application.dto.FindEmailRequest;
+import com.matzip.matzipuser.users.command.application.dto.FindPasswordRequest;
+import com.matzip.matzipuser.users.command.application.dto.ResetPasswordRequest;
 import com.matzip.matzipuser.users.command.application.service.UsersCommandService;
 import com.matzip.matzipuser.users.command.application.dto.CreateUserRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,10 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,6 +29,7 @@ public class UsersAuthController {
     public ResponseEntity<String> logout() {
         // 클라이언트에게 토큰 삭제 요청 안내
 //        log.info("POST /api/v1/auth/logout - 로그아웃 요청");
+
         return ResponseEntity.ok("로그아웃되었습니다. 클라이언트는 토큰을 삭제해야 합니다.");
     }
 
@@ -46,12 +46,32 @@ public class UsersAuthController {
 
     /* 이메일 찾기 */
     @PostMapping("/find-email")
-    @Operation(summary = "이메일 찾기", description = "이름과 휴대폰 번호로 이메일 찾기")
+    @Operation(summary = "이메일 찾기", description = "이름과 휴대폰 번호로 이메일 찾기-정보 마스킹")
     public ResponseEntity<SuccessResMessage> findEmail(@Valid @RequestBody FindEmailRequest request) {
 //        log.info("POST /user/api/v1/auth/find-email - 이메일 찾기 요청 findEmailRequest: {}", request);
         String maskedEmail = usersCommandService.findEmail(request);
 
         return ResponseEntity.ok(new SuccessResMessage(SuccessCode.FIND_EMAIL_SUCCESS, maskedEmail));
+    }
+
+    /* 비밀번호 찾기 - 비밀번호 재설정 url 발송 */
+    @PostMapping("/send-pw-reset-url")
+    @Operation(summary = "비밀번호 재설정 URL 발송", description = "이메일과 휴대폰로 비밀번호 재설정 url을 이메일로 발송")
+    public ResponseEntity<SuccessResMessage> sendPasswordResetUrl(@Valid @RequestBody FindPasswordRequest request) {
+//        log.info("POST /user/api/v1/auth/send-resetpw-url - 비밀번호 토큰전송 요청 sendPasswordResetUrl: {}", request);
+        usersCommandService.sendPasswordResetUrl(request);
+
+        return ResponseEntity.ok(new SuccessResMessage(SuccessCode.SEND_PASSWORD_EMAIL_SUCCESS));
+    }
+
+    /* 비밀번호 찾기 - 비밀번호 재설정 */
+    @PostMapping("/reset-password")
+    @Operation(summary = "비밀번호 재설정", description = "토큰을 이용해 새로운 비밀번호를 설정합니다.")
+    public ResponseEntity<SuccessResMessage> resetPassword(@RequestParam String token, @RequestBody ResetPasswordRequest request) {
+//        log.info("POST /user/api/v1/auth/password - 토큰을 이용한 비밀번호 재설정  resetPassword: {}", request);
+        usersCommandService.resetPassword(token, request);
+
+        return ResponseEntity.ok(new SuccessResMessage(SuccessCode.BASIC_UPDATE_SUCCESS));
     }
 
 }

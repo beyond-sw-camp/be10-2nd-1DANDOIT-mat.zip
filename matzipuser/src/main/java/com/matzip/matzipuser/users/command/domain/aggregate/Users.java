@@ -65,6 +65,12 @@ public class Users {
         this.userPhone = phoneNumber;
     }
 
+    //  비밀번호 재설정 토큰
+    public void updatePasswordToken(String token, LocalDateTime dueTime) {
+        this.pwResetToken = token;
+        this.pwTokenDueTime = dueTime;
+    }
+
     // 사업자 인증 상태 변경
     public void updateBusinessStatus(boolean isVerified) {
         this.businessVerifiedYn = isVerified ? "Y" : "N";

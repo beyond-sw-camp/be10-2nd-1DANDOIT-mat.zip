@@ -1,10 +1,14 @@
 package com.matzip.matzipuser.users.command.application.service;
 
+import com.matzip.matzipuser.exception.ErrorCode;
 import com.matzip.matzipuser.exception.RestApiException;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -33,7 +37,7 @@ public class EmailService {
 
     // 회원가입 인증코드 보내기
     public void sendSignUpEmail(String email, String name){
-//        log.info("========인증코드 발송 서비스 - sendSignUpEmail========");
+//        log.info("========인증코드 발송 서비스 - sendSignUpEmail : email: {}========", email);
         String subject = "[맛zip]회원가입 인증코드입니다.";
         String verificationCode = makeVerificationCode();
         verificationCodes.put(email, verificationCode);
@@ -106,4 +110,29 @@ public class EmailService {
         emailVerifiedMap.remove(email); // 인증 성공 시 맵에서 인증여부 제거
     }
 
+    // 비밀번호 재설정 토큰 url 보내기
+    public void sendPasswordResetUrl(String email, String token) {
+//        log.info("========비밀번호 재설정 url 이메일 전송 서비스 - sendPasswordResetUrl========");
+        String baseUrl = "http://localhost:5173";
+
+        String resetUrl = baseUrl + "/user/api/v1/auth/reset-password?pwtoken=" + token;
+        String subject = "[맛zip] 비밀번호 재설정 링크 안내";
+        String message = "<p>비밀번호 재설정을 위한 링크입니다:</p>" +
+                "<p><a href='" + resetUrl + "'>여기</a> 를 클릭하여 비밀번호를 재설정하세요.</p>" +
+                "<p>링크는 1시간 동안만 유효합니다.</p>" +
+                "<p>이 메일은 회신이 불가능합니다.</p>";
+
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            helper.setTo(email);
+            helper.setSubject(subject);
+            helper.setText(message, true); // HTML 형식으로 전송
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            throw new RestApiException(ErrorCode.SEND_MAIL_FAIL);
+        }
+
+    }
 }

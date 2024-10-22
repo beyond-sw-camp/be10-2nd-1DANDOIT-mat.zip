@@ -15,6 +15,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 import static com.matzip.matzipuser.exception.ErrorCode.*;
 
 @Service
@@ -225,6 +228,46 @@ public class UsersCommandService {
 
         String id = email.substring(0, 3);
         return id + "***" + email.substring(atIndex);
+    }
+
+    // 비밀번호 재설정 토큰
+    public void sendPasswordResetUrl(FindPasswordRequest request) {
+//        log.info("========비밀번호 재설정 토큰 생성 서비스 진입========");
+        Users user = usersDomainRepository.findByUserEmailAndUserPhone(request.getUserEmail(), request.getUserPhone())
+                .orElseThrow(() -> new RestApiException(ErrorCode.NOT_FOUND));
+
+        // 기존의 토큰이 아직 유효한 경우
+        if (user.getPwTokenDueTime() != null && user.getPwTokenDueTime().isAfter(LocalDateTime.now())) {
+//            log.debug("토큰 만료 전");
+            throw new RestApiException(ErrorCode.TOKEN_ALREADY_SENT);
+        }
+
+        // 재설정 토큰 생성
+        String resetToken = uuidGenerator.createPasswordResetToken();
+        LocalDateTime tokenExpiry = LocalDateTime.now().plusHours(1); // 1시간 유효
+//        log.info("토큰 생성 완료 - token : {}, 만료시간 : {}", resetToken, tokenExpiry);
+
+        // 사용자 엔티티에 토큰과 만료 시간 저장
+        user.updatePasswordToken(resetToken, tokenExpiry);
+        usersDomainRepository.save(user);
+
+        // 이메일로 비밀번호 재설정 링크 전송
+        emailService.sendPasswordResetUrl(user.getUserEmail(), resetToken);
+    }
+
+    // 토큰을 이용한 비밀번호 재설정
+    public void resetPassword(String token, ResetPasswordRequest request) {
+//        log.info("========토큰을 이용한 비밀번호 재설정 서비스 진입========");
+        Users user = usersDomainRepository.findByPwResetToken(token)
+                .filter(u -> u.getPwTokenDueTime().isAfter(LocalDateTime.now()))  // 토큰 만료 시간 확인
+                .orElseThrow(() -> new RestApiException(ErrorCode.EXPIRED_TOKEN));
+
+        // 새로운 비밀번호 설정
+        user.encryptPassword(passwordEncoder.encode(request.getUserPassword()));
+        user.updatePasswordToken(null, null); // 사용한 토큰 및 만료 시간 초기화
+//        log.info("비밀번호 변경 완료 및 토큰 삭제");
+
+        usersDomainRepository.save(user);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.matzip.matzipuser.users.command.domain.repository;
 
 import com.matzip.matzipuser.users.command.domain.aggregate.Users;
+import org.modelmapper.internal.bytebuddy.asm.TypeReferenceAdjustment;
 
 import java.util.Optional;
 
@@ -21,5 +22,9 @@ public interface UsersDomainRepository {
 
     void delete(Users user); // 회원탈퇴
 
-    Optional<Users> findByUserNameAndUserPhone(String userName, String userPhone); // 이메일 찾기
+    Optional<Users> findByUserNameAndUserPhone(String userName, String userPhone); // 이메일 찾기에서 이름과 번호가 일치하는 회원찾기
+
+    Optional<Users> findByUserEmailAndUserPhone(String userEmail, String userPhone); // 비밀번호 재설정을 위해 이메일과 번호가 일치하는 회원찾기
+
+    Optional<Users> findByPwResetToken(String pwResetToken); // 토큰으로 회원찾기
 }
