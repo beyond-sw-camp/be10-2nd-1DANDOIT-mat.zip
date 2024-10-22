@@ -25,8 +25,10 @@ public enum SuccessCode {
     USER_DELETION_SUCCESS(HttpStatus.OK, "탈퇴가 성공적으로 처리되었습니다."),
 
     /* 이메일 찾기 */
-    FIND_EMAIL_SUCCESS(HttpStatus.OK, "이메일 찾기에 성공했습니다.");
+    FIND_EMAIL_SUCCESS(HttpStatus.OK, "이메일 찾기에 성공했습니다."),
 
+    /* 임시 비밀번호 발급 */
+    SEND_PASSWORD_EMAIL_SUCCESS(HttpStatus.OK, "비밀번호 재설정 URL이 이메일로 발송되었습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
