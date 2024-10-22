@@ -4,10 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
-public class UpdateUserStatusDTO {
+public class UserPwTokenDTO {
 
-    private String userStatus;
+    private Long userSeq;
+    private String pwResetToken;
+    private LocalDateTime pwTokenDueTime;
 }

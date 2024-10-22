@@ -27,7 +27,8 @@ public class UsersActivityQueryController {
     // 전체 회원 활동 등급 조회 (관리자)
     @GetMapping("/users/activity")
     @Operation(summary = "전체 회원 활동 등급 조회", description = "전체 회원의 활동 등급을 조회한다.")
-    public ResponseEntity<UsersActivityQueryResMessageDTO> searchAllUsersActivity(@RequestParam("page") int page, @RequestParam("active") String active) {
+    public ResponseEntity<UsersActivityQueryResMessageDTO> searchAllUsersActivity(
+            @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam("active") String active) {
 
         List<UsersActivityDTO> usersActivityList = usersActivityQueryService.searchAllUsersActivity(page, active);
 

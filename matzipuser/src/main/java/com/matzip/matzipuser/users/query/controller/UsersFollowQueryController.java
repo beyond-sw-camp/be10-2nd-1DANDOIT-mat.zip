@@ -26,8 +26,10 @@ public class UsersFollowQueryController {
 
     // 내가 팔로우한 유저 조회 기능
     @GetMapping("/follow")
-    @Operation(summary = "나의 팔로잉 목록 조회", description = "내가 팔로우 한 유저 목록을 조회한다.")
-    public ResponseEntity<FollowQueryResMessageDTO> searchFollowing(@RequestParam("userSeq") long userSeq, @RequestParam("page") long page) {
+    @Operation(summary = "회원의 팔로잉 목록 조회", description = "해당 회원이 팔로우 한 유저 목록을 조회한다.")
+    public ResponseEntity<FollowQueryResMessageDTO> searchFollowing(
+            @RequestParam("userSeq") long userSeq,
+            @RequestParam(value = "page", defaultValue = "1") long page) {
         List<FollowingUsersDTO> followList = usersFollowQueryService.searchFollowingUsers(userSeq, page);
 
         return ResponseEntity.ok(new FollowQueryResMessageDTO(HttpStatus.OK.value(), ResponseMessage.FOUND.getMessage(), followList));
@@ -35,8 +37,10 @@ public class UsersFollowQueryController {
 
     // 팔로우한 유저 조회 기능
     @GetMapping("/follower")
-    @Operation(summary = "나의 팔로우 목록 조회", description = "나를 팔로우 한 유저 목록을 조회한다.")
-    public ResponseEntity<FollowQueryResMessageDTO> searchFollowers(@RequestParam("userSeq") long userSeq, @RequestParam("page") long page) {
+    @Operation(summary = "회원의 팔로우 목록 조회", description = "해당 회원을 팔로우 한 유저 목록을 조회한다.")
+    public ResponseEntity<FollowQueryResMessageDTO> searchFollowers(
+            @RequestParam("userSeq") long userSeq,
+            @RequestParam(value = "page", defaultValue = "1") long page) {
         List<FollowingUsersDTO> followerList = usersFollowQueryService.searchFollowerUsers(userSeq, page);
 
         return ResponseEntity.ok(new FollowQueryResMessageDTO(HttpStatus.OK.value(), ResponseMessage.FOUND.getMessage(), followerList));

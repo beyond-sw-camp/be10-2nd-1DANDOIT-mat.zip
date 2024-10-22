@@ -25,6 +25,7 @@ public class ActiveLevelController {
     private final ActiveLevelService activeLevelService;
 
     // active-level 저장
+    // 관리자
     @PostMapping("/active-level")
     @Operation(summary = "회원 활동 등급 등록", description = "회원 활동 등급을 등록한다.")
     public ResponseEntity<SuccessResMessage> saveActiveLevel(@RequestBody CreateActiveLevelRequestDTO createActiveLevelRequestDTO) {
@@ -39,6 +40,7 @@ public class ActiveLevelController {
         return ResponseEntity.ok(new SuccessResMessage(SuccessCode.BASIC_SAVE_SUCCESS));
     }
 
+    // 관리자
     @PutMapping("/active-level")
     @Operation(summary = "회원 활동 등급 수정", description = "회원 활동 등급을 수정한다.")
     public ResponseEntity<SuccessResMessage> updateActiveLevel(
@@ -49,6 +51,7 @@ public class ActiveLevelController {
         return ResponseEntity.ok(new SuccessResMessage(SuccessCode.BASIC_UPDATE_SUCCESS));
     }
 
+    // 관리자
     @DeleteMapping("/active-level/{activeLevelSeq}")
     @Operation(summary = "회원 활동 등급을 삭제", description = "회원 활동 등급을 삭제한다.")
     public ResponseEntity<SuccessResMessage> deleteActiveLevel(@PathVariable Long activeLevelSeq) {
@@ -57,6 +60,7 @@ public class ActiveLevelController {
         return ResponseEntity.ok(new SuccessResMessage(SuccessCode.BASIC_DELETE_SUCCESS));
     }
 
+    // 회원
     // userActivity point 업데이트
     @PutMapping("/user-activity/point")
     @Operation(summary = "회원 활동 포인트 업데이트", description = "회원 활동 포인트를 업데이트한다.")

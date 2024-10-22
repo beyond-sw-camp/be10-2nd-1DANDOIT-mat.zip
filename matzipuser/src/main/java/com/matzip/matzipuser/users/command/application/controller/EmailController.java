@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/user/api/v1")
+@RequiredArgsConstructor
 @Slf4j
 @Tag(name = "Users", description = "회원관리")
 public class EmailController {

@@ -7,7 +7,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class UpdateUserStatusDTO {
+public class UserPwDTO {
 
-    private String userStatus;
+    private Long userSeq;
+    private String userPassword;
+    private String pwResetToken;
+    private String pwTokenDueTime;
 }

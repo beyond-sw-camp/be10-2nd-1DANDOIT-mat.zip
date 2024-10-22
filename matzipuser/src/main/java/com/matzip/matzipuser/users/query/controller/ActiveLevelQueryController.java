@@ -28,7 +28,8 @@ public class ActiveLevelQueryController {
     // 활동 등급 테이블 전체 조회 (관리자)
     @Operation(summary = "활동 등급 조회", description = "활동 등급을 조회한다.")
     @GetMapping("/active-level")
-    public ResponseEntity<ActiveLevelResMessageDTO> searchAllActiveLevel(@RequestParam(value = "page", defaultValue = "1")long page) {
+    public ResponseEntity<ActiveLevelResMessageDTO> searchAllActiveLevel(
+            @RequestParam(value = "page", defaultValue = "1")long page) {
         List<ActiveLevelDTO> activeLevelList = activeLevelQueryService.searchAllActiveLevel(page);
 
         return ResponseEntity.ok(new ActiveLevelResMessageDTO(HttpStatus.OK.value(), ResponseMessage.FOUND.getMessage(), activeLevelList));

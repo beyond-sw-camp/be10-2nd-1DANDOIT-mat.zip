@@ -102,7 +102,8 @@ public class PenaltyCommandService {
 
         //유저 상태 inactive 비활성화 설정
         userInfraService.updateUserStatus(
-                new UpdateUserStatusDTO(newPenalty.getPenaltyUserSeq(),"inactive"));
+                newPenalty.getPenaltyUserSeq(),
+                new UpdateUserStatusDTO("inactive"));
 
         return penaltySeq;
     }
@@ -134,7 +135,8 @@ public class PenaltyCommandService {
 
         //유저 상태 inactive -> active 설정
         userInfraService.updateUserStatus(
-                new UpdateUserStatusDTO(penalty.getPenaltyUserSeq(),"active"));
+                penalty.getPenaltyUserSeq(),
+                new UpdateUserStatusDTO("active"));
 
     }
 
