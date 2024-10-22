@@ -67,7 +67,13 @@ public enum ErrorCode {
     SEND_MAIL_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "메일 발송에 실패했습니다."),
 
     /* 이메일 인증시간 만료 */
-    EXPIRE_VERIFICATION_CODE(HttpStatus.NOT_FOUND, "인증시간이 만료되었습니다. 다시 요청해주세요.");
+    EXPIRE_VERIFICATION_CODE(HttpStatus.NOT_FOUND, "인증시간이 만료되었습니다. 다시 요청해주세요."),
+
+    /* 비밀번호 재설정 토큰 만료 전 */
+    TOKEN_ALREADY_SENT(HttpStatus.CONFLICT, "이미 비밀번호 재설정 이메일이 전송되었습니다. 잠시 후 다시 시도해 주세요."),
+
+    /* 만료된 토큰 */
+    EXPIRED_TOKEN(HttpStatus.NOT_FOUND, "만료된 토큰입니다. 다시 요청해주세요.");
 
     private final HttpStatus httpStatus;
     private final String message;
