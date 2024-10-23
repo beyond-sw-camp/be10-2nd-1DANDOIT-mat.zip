@@ -4,6 +4,7 @@ import com.matzip.matzipback.config.FeignClientConfig;
 import com.matzip.matzipback.report.command.dto.UpdateUserStatusDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -12,7 +13,9 @@ public interface UserInfraService {
 
 
     // 회원 상태 변경
-    @PutMapping("/userStatus")
+    @PutMapping("/user/api/v1/user/userStatus/{userSeq}")
     @Operation(summary = "회원 상태 변경", description = "회원의 상태를 변경한다.")
-    void updateUserStatus(@RequestBody UpdateUserStatusDTO updateUserStatusDTO);
+    void updateUserStatus(
+            @PathVariable Long userSeq,
+            @RequestBody UpdateUserStatusDTO updateUserStatusDTO);
 }

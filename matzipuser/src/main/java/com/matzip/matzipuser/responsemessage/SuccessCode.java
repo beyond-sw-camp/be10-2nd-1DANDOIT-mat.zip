@@ -28,7 +28,9 @@ public enum SuccessCode {
     FIND_EMAIL_SUCCESS(HttpStatus.OK, "이메일 찾기에 성공했습니다."),
 
     /* 임시 비밀번호 발급 */
-    SEND_PASSWORD_EMAIL_SUCCESS(HttpStatus.OK, "비밀번호 재설정 URL이 이메일로 발송되었습니다.");
+    SEND_PASSWORD_EMAIL_SUCCESS(HttpStatus.OK, "비밀번호 재설정 URL이 이메일로 발송되었습니다."),
+    /* 회원 로그아웃 성공 */
+    USER_LOGOUT_SUCCESS(HttpStatus.OK, "로그아웃되었습니다. 클라이언트는 토큰을 삭제해야 합니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

@@ -49,7 +49,10 @@ public enum ErrorCode {
     /*
      * 500 INTERNAL_SERVER_ERROR: 내부 서버 오류
      */
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Server error.");
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Server error."),
+
+    /* 로그인 실패 */
+    LOGIN_FAIL(HttpStatus.BAD_REQUEST, "해당 회원에 대한 정보가 없어서 로그인 실패했습니다.");
 
 
     private final HttpStatus httpStatus;

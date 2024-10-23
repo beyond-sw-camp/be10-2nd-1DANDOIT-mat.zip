@@ -15,7 +15,6 @@ public class UsersFollowQueryService {
 
     public List<FollowingUsersDTO> searchFollowingUsers(long userSeq, long page) {
 
-
         if (page <= 0) {
             page = 1;
         }
@@ -34,7 +33,6 @@ public class UsersFollowQueryService {
     }
 
     public List<FollowingUsersDTO> searchFollowerUsers(long userSeq, long page) {
-
 
         if (page <= 0) {
             page = 1;

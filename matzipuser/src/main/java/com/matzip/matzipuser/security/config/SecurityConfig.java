@@ -14,16 +14,21 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -44,13 +49,21 @@ public class SecurityConfig {
                     // 회원가입 Post 는 인증 필요 없음
                     auths.requestMatchers(
                             new AntPathRequestMatcher("/user/api/v1/auth/register"),
-                            new AntPathRequestMatcher("/user/api/v1/**"),
-                            new AntPathRequestMatcher("/**"),
+//                            new AntPathRequestMatcher("/user/api/v1/**"),
+//                            new AntPathRequestMatcher("/**"),
                             new AntPathRequestMatcher("/swagger-ui/index.html"),
                             new AntPathRequestMatcher("/swagger-ui/**"),
-                            new AntPathRequestMatcher("/v3/api-docs/**")
-                            ).permitAll()
-                            .anyRequest().authenticated();
+                            new AntPathRequestMatcher("/webjars/swagger-ui/**"),
+                            new AntPathRequestMatcher("/v3/api-docs/**"),
+                            new AntPathRequestMatcher("/user/v3/api-docs")
+                            ).permitAll();
+
+                    allAuthConnection(auths);
+                    userAuthConnection(auths);
+                    adminAuthConnection(auths);
+
+                    auths.anyRequest().authenticated();
+
                 })
                 /* session 로그인 방식을 사용하지 않음 (JWT Token 방식을 사용할 예정) */
                 .sessionManagement(
@@ -79,6 +92,53 @@ public class SecurityConfig {
 
     }
 
+
+    // 관리자 접근 url
+    private void adminAuthConnection(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auths) {
+        auths.requestMatchers(
+                new AntPathRequestMatcher("/user/api/v1/active-level", "POST"),
+                new AntPathRequestMatcher("/user/api/v1/active-level", "PUT"),
+                new AntPathRequestMatcher("/user/api/v1/active-level/{activeLevelSeq}", "DELETE"),
+                new AntPathRequestMatcher("/user/api/v1/active-level", "GET"),
+                new AntPathRequestMatcher("/user/api/v1/users/activity", "GET"),
+                new AntPathRequestMatcher("/user/api/v1/users/list", "GET"),
+                new AntPathRequestMatcher("/user/api/v1/users", "GET"),
+                new AntPathRequestMatcher("/user/api/v1/users/{userSeq}", "GET"),
+                new AntPathRequestMatcher("/user/api/v1/users/email", "GET"),
+                new AntPathRequestMatcher("/user/api/v1/users/userseq", "GET")
+        ).hasAuthority("admin");
+    }
+
+    // 회원 접근 url
+    private void userAuthConnection(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auths) {
+        auths.requestMatchers(
+                new AntPathRequestMatcher("/user/api/v1/user-activity/point", "PUT"),
+                new AntPathRequestMatcher("/user/api/v1/auth/logout", "POST"),
+                new AntPathRequestMatcher("/user/api/v1/follow", "POST"),
+                new AntPathRequestMatcher("/user/api/v1/user/{userSeq}", "PUT"),
+                new AntPathRequestMatcher("/user/api/v1/user/{userSeq}", "DELETE"),
+                new AntPathRequestMatcher("/user/api/v1/user/userStatus/{userSeq}", "PUT"),
+                new AntPathRequestMatcher("/user/api/v1/follow", "GET"),
+                new AntPathRequestMatcher("/user/api/v1/follower", "GET" ),
+                new AntPathRequestMatcher("/user/api/v1/users", "GET"),
+                new AntPathRequestMatcher("/user/api/v1/users/{userSeq}", "GET"),
+                new AntPathRequestMatcher("/user/api/v1/users/email", "GET"),
+                new AntPathRequestMatcher("/user/api/v1/users/userseq", "GET")
+        ).hasAuthority("user");
+    }
+
+    // 모든 접근 url
+    private void allAuthConnection(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auths) {
+        auths.requestMatchers(
+                new AntPathRequestMatcher("/user/api/v1/auth/mai-verification", "POST"),
+                new AntPathRequestMatcher("/user/api/v1/auth/chkEmailCode", "POST"),
+                new AntPathRequestMatcher("/user/api/v1/register", "POST"),
+                new AntPathRequestMatcher("/user/api/v1/find-email", "POST"),
+                new AntPathRequestMatcher("/user/api/v1/auth/send-pw-reset-url", "POST"),
+                new AntPathRequestMatcher("/user/api/v1/reset-password", "POST")
+        ).permitAll();
+    }
+
     private Filter getAuthenticationFilter() {
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter();
         customAuthenticationFilter.setAuthenticationManager(getAuthenticationManager());
@@ -94,5 +154,24 @@ public class SecurityConfig {
         provider.setPasswordEncoder(passwordEncoder);
         provider.setUserDetailsService(userDetailService);
         return new ProviderManager(provider);
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        return new CorsFilter(corsConfigurationSource());
+    }
+
+    @Bean
+    public UrlBasedCorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("http://localhost:5173"); // 허용할 도메인
+        config.addAllowedHeader("*"); // 모든 헤더 허용
+        config.addAllowedMethod("*"); // 모든 HTTP 메소드 허용
+        config.addExposedHeader("token"); // 서버측에서 보내는 헤더에 대한 허용 설정
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 }

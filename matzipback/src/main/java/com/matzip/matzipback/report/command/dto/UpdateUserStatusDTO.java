@@ -9,6 +9,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UpdateUserStatusDTO {
 
-    private Long userSeq;
     private String userStatus;
 }

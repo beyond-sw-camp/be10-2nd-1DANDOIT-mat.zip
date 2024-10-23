@@ -39,7 +39,6 @@ public class CustomUserDetailService implements UserDetailsService {
             loginUser = modelMapper.map(response.getData2(), UsersDTO.class);
 
         } catch (Exception e) {
-            log.info("이미 로그인 된 유저, seq(" + e.getMessage() + ")로 검색");
             SuccessSearchResMessage<UserTokenDTO> response= userFeignClient.getUserByUserSeq(Long.parseLong(userEmail));
             if (response.getData2() == null) throw new UsernameNotFoundException("해당 유저가 존재하지 않습니다.");
 

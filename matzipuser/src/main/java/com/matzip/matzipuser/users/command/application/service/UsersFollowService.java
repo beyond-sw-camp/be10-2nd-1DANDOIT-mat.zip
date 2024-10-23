@@ -1,5 +1,6 @@
 package com.matzip.matzipuser.users.command.application.service;
 
+import com.matzip.matzipuser.common.util.CustomUserUtils;
 import com.matzip.matzipuser.users.command.domain.aggregate.Follow;
 import com.matzip.matzipuser.users.command.domain.service.UsersFollowDomainService;
 import com.matzip.matzipuser.users.command.application.dto.FollowDTO;
@@ -18,8 +19,7 @@ public class UsersFollowService {
     @Transactional
     public int doFollow(FollowDTO followDTO) {
 
-//        long followingUserSeq = CustomUserUtils.getCurrentUserSeq();
-        long followingUserSeq = 2L;
+        long followingUserSeq = CustomUserUtils.getCurrentUserSeq();
 
         // 팔로우하는 사람과 팔로우를 당하는 사람이 같다면 0을 리턴
         if (usersFollowDomainService.isSameFollowingAndFollowed(followDTO, followingUserSeq)) return 0;
