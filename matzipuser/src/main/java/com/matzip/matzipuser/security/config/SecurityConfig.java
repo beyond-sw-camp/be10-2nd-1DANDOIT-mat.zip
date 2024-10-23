@@ -103,9 +103,9 @@ public class SecurityConfig {
                 new AntPathRequestMatcher("/user/api/v1/users/activity", "GET"),
                 new AntPathRequestMatcher("/user/api/v1/users/list", "GET"),
                 new AntPathRequestMatcher("/user/api/v1/users", "GET"),
-                new AntPathRequestMatcher("/user/api/v1/users/{userSeq}", "GET"),
-                new AntPathRequestMatcher("/user/api/v1/users/email", "GET"),
-                new AntPathRequestMatcher("/user/api/v1/users/userseq", "GET")
+                new AntPathRequestMatcher("/user/api/v1/user/{userSeq}", "GET"),
+                new AntPathRequestMatcher("/user/api/v1/user/email", "GET"),
+                new AntPathRequestMatcher("/user/api/v1/user/userseq", "GET")
         ).hasAuthority("admin");
     }
 
@@ -121,9 +121,9 @@ public class SecurityConfig {
                 new AntPathRequestMatcher("/user/api/v1/follow", "GET"),
                 new AntPathRequestMatcher("/user/api/v1/follower", "GET" ),
                 new AntPathRequestMatcher("/user/api/v1/users", "GET"),
-                new AntPathRequestMatcher("/user/api/v1/users/{userSeq}", "GET"),
-                new AntPathRequestMatcher("/user/api/v1/users/email", "GET"),
-                new AntPathRequestMatcher("/user/api/v1/users/userseq", "GET")
+                new AntPathRequestMatcher("/user/api/v1/user/{userSeq}", "GET"),
+                new AntPathRequestMatcher("/user/api/v1/user/email", "GET"),
+                new AntPathRequestMatcher("/user/api/v1/user/userseq", "GET")
         ).hasAuthority("user");
     }
 

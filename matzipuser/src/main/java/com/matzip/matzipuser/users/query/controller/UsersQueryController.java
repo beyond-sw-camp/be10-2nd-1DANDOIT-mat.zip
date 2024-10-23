@@ -87,7 +87,7 @@ public class UsersQueryController {
     }
 
     // 1차 수정 완료 - 가람
-    @GetMapping("/users/{userSeq}")
+    @GetMapping("/user/{userSeq}")
     @Operation(summary = "회원 상세조회", description = "관리자 또는 회원이 회원정보를 상세조회한다.")
     public ResponseEntity<?> DetailUserInfo(@PathVariable Long userSeq) {
 
@@ -110,7 +110,7 @@ public class UsersQueryController {
     }
 
     // 이메일로 유저 찾기
-    @GetMapping("/users/email")
+    @GetMapping("/user/email")
     public ResponseEntity<SuccessSearchResMessage<?>> getUserByEmail(@RequestParam("email") String email) {
 
         UserTokenDTO userTokenDTO = usersInfoService.getUserByEmail(email);
@@ -120,7 +120,7 @@ public class UsersQueryController {
     }
 
     // 유저번호로 유저 찾기
-    @GetMapping("/users/userseq")
+    @GetMapping("/user/userseq")
     public ResponseEntity<SuccessSearchResMessage<?>> getUserByUserSeq(@RequestParam("userSeq") Long userSeq) {
 
         UserTokenDTO userTokenDTO = usersInfoService.getUserByUserSeq(userSeq);
