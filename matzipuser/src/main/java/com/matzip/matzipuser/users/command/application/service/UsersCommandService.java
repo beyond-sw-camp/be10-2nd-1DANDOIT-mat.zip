@@ -174,5 +174,6 @@ public class UsersCommandService {
         UserPwDTO userPwDTO = usersDomainService.findByPwResetToken(token);
         // 새로운 비밀번호 설정
         usersDomainService.saveNewPw(userPwDTO, request);
+        usersDomainService.makeTokenDueTimeNull(userPwDTO);
     }
 }

@@ -12,6 +12,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UpdateUserRequest {
 
+    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*.,?])[A-Za-z\\d!@#$%^&*.,?]{8,}$",
+            message = "비밀번호는 영문, 숫자, 특수문자를 포함한 8자 이상이어야 합니다.")
     private String userPassword;
     @Pattern(regexp = "^[0-9]{10,11}$", message = "휴대폰 번호는 10자리 또는 11자리 숫자여야 합니다.")
     private String userPhone;
