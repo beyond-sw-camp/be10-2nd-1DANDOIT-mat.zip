@@ -35,4 +35,9 @@ public class ActiveLevelQueryService {
 
         return activeLevelMapper.findAllActiveLevel(offset, size);
     }
+
+    public long searchAllActiveLevelCount() {
+
+        return activeLevelMapper.countAllActiveLevel();
+    }
 }

@@ -105,7 +105,8 @@ public class SecurityConfig {
                 new AntPathRequestMatcher("/user/api/v1/users", "GET"),
                 new AntPathRequestMatcher("/user/api/v1/user/{userSeq}", "GET"),
                 new AntPathRequestMatcher("/user/api/v1/user/email", "GET"),
-                new AntPathRequestMatcher("/user/api/v1/user/userseq", "GET")
+                new AntPathRequestMatcher("/user/api/v1/user/userseq", "GET"),
+                new AntPathRequestMatcher("/user/api/v1/active-level-count", "GET")
         ).hasAuthority("admin");
     }
 

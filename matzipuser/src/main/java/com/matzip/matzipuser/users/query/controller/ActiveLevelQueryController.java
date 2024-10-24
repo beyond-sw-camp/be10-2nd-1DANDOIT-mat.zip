@@ -1,6 +1,8 @@
 package com.matzip.matzipuser.users.query.controller;
 
 import com.matzip.matzipuser.responsemessage.ResponseMessage;
+import com.matzip.matzipuser.responsemessage.SuccessCode;
+import com.matzip.matzipuser.responsemessage.SuccessSearchResMessage;
 import com.matzip.matzipuser.users.query.dto.ActiveLevelDTO;
 import com.matzip.matzipuser.users.query.dto.ActiveLevelResMessageDTO;
 import com.matzip.matzipuser.users.query.service.ActiveLevelQueryService;
@@ -35,5 +37,15 @@ public class ActiveLevelQueryController {
         return ResponseEntity.ok(new ActiveLevelResMessageDTO(HttpStatus.OK.value(), ResponseMessage.FOUND.getMessage(), activeLevelList));
     }
 
+
+    // 활동 등급 개수 조회
+    @Operation(summary = "활동 등급 개수 조회", description = "활동 등급의 개수를 조회한다.")
+    @GetMapping("/active-level-count")
+    public ResponseEntity<SuccessSearchResMessage<?>> searchAllActiveLevelCount() {
+
+        long cnt = activeLevelQueryService.searchAllActiveLevelCount();
+
+        return ResponseEntity.ok(new SuccessSearchResMessage<>(SuccessCode.BASIC_GET_SUCCESS, cnt));
+    }
 
 }
