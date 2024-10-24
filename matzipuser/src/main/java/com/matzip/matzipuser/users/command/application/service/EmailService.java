@@ -115,7 +115,7 @@ public class EmailService {
 //        log.info("========비밀번호 재설정 url 이메일 전송 서비스 - sendPasswordResetUrl========");
         String baseUrl = "http://localhost:5173";
 
-        String resetUrl = baseUrl + "/user/api/v1/auth/reset-password?pwtoken=" + token;
+        String resetUrl = baseUrl + "/auth/reset-password?token=" + token;
         String subject = "[맛zip] 비밀번호 재설정 링크 안내";
         String message = "<p>비밀번호 재설정을 위한 링크입니다:</p>" +
                 "<p><a href='" + resetUrl + "'>여기</a> 를 클릭하여 비밀번호를 재설정하세요.</p>" +
