@@ -309,18 +309,18 @@
         <!-- 추가 정렬 조건 -->
         <choose>
             <!-- 등급 순 정렬 -->
-            <when test="orderBy == 'gradeDESC'">
+            <when test="orderBy == 'gradeDesc'">
                 , ua.activity_point DESC
             </when>
-            <when test="orderBy == 'gradeASC'">
+            <when test="orderBy == 'gradeAsc'">
                 , ua.activity_point ASC
             </when>
 
             <!-- 닉네임 순 정렬 -->
-            <when test="orderBy == 'nicknameASC'">
+            <when test="orderBy == 'nicknameAsc'">
                 , u.user_nickname ASC
             </when>
-            <when test="orderBy == 'nicknameDESC'">
+            <when test="orderBy == 'nicknameDesc'">
                 , u.user_nickname DESC
             </when>
 
