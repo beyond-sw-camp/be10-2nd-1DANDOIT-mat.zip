@@ -52,7 +52,6 @@ public class PostCommandController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .location(URI.create("/back/api/v1/posts/" + postSeq))    // 리소스가 생성된 위치
                 .build();
-
  */
 
         try{
@@ -76,11 +75,13 @@ public class PostCommandController {
     @PostMapping(value ="/posts/uploadImage", produces = "application/json")
     @ResponseBody
     @CrossOrigin(origins = "*")
-    public ResponseEntity<String> uploadPostImageFile(@RequestParam("file") MultipartFile multipartFile) {
+    public ResponseEntity<String> uploadPostImageFile(@RequestParam("image") MultipartFile file) {
 
         JsonObject jsonObject = new JsonObject();
 
-        String fileRoot = "C:\\summernote_image\\";	//저장될 외부 파일 경로
+        // 저장될 외부 파일 경로
+        String fileRoot = "/Users/jiyoung/Desktop/toast_image/";	// MacBook
+        // String fileRoot = "C:\\toast_image\\";	// Windows 사용시 설정 경로
 
         // 디렉토리 존재 여부 체크
         File directory = new File(fileRoot);
@@ -88,20 +89,20 @@ public class PostCommandController {
             directory.mkdirs(); // 디렉토리 생성
         }
 
-        String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
+        String originalFileName = file.getOriginalFilename();	//오리지날 파일명
         String extension = originalFileName.substring(originalFileName.lastIndexOf("."));	//파일 확장자
 
         String savedFileName = UUID.randomUUID() + extension;	//저장될 파일명
         File targetFile = new File(fileRoot + savedFileName);   // 최종 저장할 파일 객체 생성
 
         try {
-            InputStream fileStream = multipartFile.getInputStream();
+            InputStream fileStream = file.getInputStream();
             FileUtils.copyInputStreamToFile(fileStream, targetFile);	//파일 저장
-            jsonObject.addProperty("url", "/summernoteImage/"+savedFileName);
+            jsonObject.addProperty("url", "/toastImage/"+savedFileName);
             jsonObject.addProperty("responseCode", "success");
 
             // URL 출력
-            System.out.println("Image URL: " + "/summernoteImage/" + savedFileName);
+            System.out.println("Image URL: " + "/toastImage/" + savedFileName);
 
         } catch (IOException e) {
             FileUtils.deleteQuietly(targetFile);	//저장된 파일 삭제
