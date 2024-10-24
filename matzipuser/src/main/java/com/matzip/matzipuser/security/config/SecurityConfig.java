@@ -132,10 +132,10 @@ public class SecurityConfig {
         auths.requestMatchers(
                 new AntPathRequestMatcher("/user/api/v1/auth/mai-verification", "POST"),
                 new AntPathRequestMatcher("/user/api/v1/auth/chkEmailCode", "POST"),
-                new AntPathRequestMatcher("/user/api/v1/register", "POST"),
-                new AntPathRequestMatcher("/user/api/v1/find-email", "POST"),
+                new AntPathRequestMatcher("/user/api/v1/auth/register", "POST"),
+                new AntPathRequestMatcher("/user/api/v1/auth/find-email", "POST"),
                 new AntPathRequestMatcher("/user/api/v1/auth/send-pw-reset-url", "POST"),
-                new AntPathRequestMatcher("/user/api/v1/reset-password", "POST")
+                new AntPathRequestMatcher("/user/api/v1/auth/reset-password", "POST")
         ).permitAll();
     }
 
