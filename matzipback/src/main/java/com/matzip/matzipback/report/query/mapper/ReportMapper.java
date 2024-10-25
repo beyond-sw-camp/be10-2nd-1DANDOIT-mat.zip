@@ -19,7 +19,7 @@ public interface ReportMapper {
             @Param("reporterUserSeq") Long reporterUserSeq,
             @Param("reportedUserSeq") Long reportedUserSeq,
             @Param("reportStatus") String reportStatus,
-            @Param("category") Long category,
+            @Param("category") String category,
             @Param("sequence") Long sequence);
 
     List<ReasonDTO> selectReportReasons(
@@ -29,7 +29,7 @@ public interface ReportMapper {
             @Param("reporterUserSeq") Long reporterUserSeq,
             @Param("reportedUserSeq") Long reportedUserSeq,
             @Param("reportStatus") String reportStatus,
-            @Param("category") Long category,
+            @Param("category") String category,
             @Param("sequence") Long sequence);
 
     ReportDTO selectReportBySeq(

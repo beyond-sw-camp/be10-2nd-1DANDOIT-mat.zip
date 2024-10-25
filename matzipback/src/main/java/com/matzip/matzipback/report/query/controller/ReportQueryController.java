@@ -52,7 +52,7 @@ public class ReportQueryController {
             @RequestParam(required = false) Long reporterUserSeq,
             @RequestParam(required = false) Long reportedUserSeq,
             @RequestParam(required = false) String reportStatus,
-            @RequestParam(required = false) Long category,
+            @RequestParam(required = false) String category,
             @RequestParam(required = false) Long sequence) {
 
         try { if (CustomUserUtils.getCurrentUserAuthorities().iterator().next().getAuthority().equals("admin")) {

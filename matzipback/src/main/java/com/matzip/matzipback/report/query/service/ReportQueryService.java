@@ -26,7 +26,7 @@ public class ReportQueryService {
 
     // 신고 검색 및 조회
     @Transactional(readOnly = true)
-    public ReportListResponse getReports(Integer page, Integer size, Long reporterUserSeq, Long reportedUserSeq, String reportStatus, Long category, Long sequence) {
+    public ReportListResponse getReports(Integer page, Integer size, Long reporterUserSeq, Long reportedUserSeq, String reportStatus, String category, Long sequence) {
         int offset = (page - 1) * size;
 
         List<ReportDTO> reports = reportMapper.selectReports(offset, size, reporterUserSeq, reportedUserSeq, reportStatus, category, sequence);
