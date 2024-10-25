@@ -163,9 +163,16 @@ public class UsersDomainService {
                 .orElseThrow(() -> new RestApiException(ErrorCode.CANNOT_FIND_USER));
 
         userPwDTO.setUserPassword(passwordEncoder.encode(resetPasswordRequest.getUserPassword()));
-        userPwDTO.setPwResetToken(null); // 사용한 토큰 및 만료 시간 초기화
-        userPwDTO.setPwTokenDueTime(null);
 
         modelMapper.map(userPwDTO, foundUser);
+
+    }
+
+    public void makeTokenDueTimeNull(UserPwDTO userPwDTO) {
+        Users foundUser = usersDomainRepository.findById(userPwDTO.getUserSeq())
+                .orElseThrow(() -> new RestApiException(ErrorCode.CANNOT_FIND_USER));
+
+        foundUser.updatePasswordToken(null, null);
     }
 }
+

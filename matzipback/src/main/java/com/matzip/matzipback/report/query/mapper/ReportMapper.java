@@ -18,6 +18,7 @@ public interface ReportMapper {
             @Param("limit") int limit,
             @Param("reporterUserSeq") Long reporterUserSeq,
             @Param("reportedUserSeq") Long reportedUserSeq,
+            @Param("penaltySeq") Long penaltySeq,
             @Param("reportStatus") String reportStatus,
             @Param("category") String category,
             @Param("sequence") Long sequence);
@@ -28,6 +29,7 @@ public interface ReportMapper {
     long countReports(
             @Param("reporterUserSeq") Long reporterUserSeq,
             @Param("reportedUserSeq") Long reportedUserSeq,
+            @Param("penaltySeq") Long penaltySeq,
             @Param("reportStatus") String reportStatus,
             @Param("category") String category,
             @Param("sequence") Long sequence);

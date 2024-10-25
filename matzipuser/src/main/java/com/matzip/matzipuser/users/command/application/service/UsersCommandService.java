@@ -20,7 +20,6 @@ import static com.matzip.matzipuser.exception.ErrorCode.*;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@Transactional
 public class UsersCommandService {
 
     private final UsersDomainService usersDomainService;
@@ -34,28 +33,33 @@ public class UsersCommandService {
     @Transactional
     public void createUser(CreateUserRequest newUser) {
 
-        // 이메일 중복체크
-        if(usersDomainService.existsByUserEmail(newUser.getUserEmail()))
-            throw new RestApiException(ErrorCode.DUPLICATED_USER_EMAIL);
-
         // 이메일 인증 여부 확인
         if (!emailService.isEmailVerified(newUser.getUserEmail()))
+            throw new RestApiException(ErrorCode.NOT_AUTHORIZED_USER_EMAIL);
+
+        // 이메일 중복체크(인증이 완료된 경우 건너뜀)
+        if (usersDomainService.existsByUserEmail(newUser.getUserEmail())) {
             throw new RestApiException(ErrorCode.DUPLICATED_USER_EMAIL);
+        }
 
         // 휴대폰 증복 체크
-        usersDomainService.isPhoneDuplicated(newUser.getUserPhone());
+        isPhoneDuplicated(newUser.getUserPhone());
 
 
         // 닉네임 중복 체크 (사용자가 입력한 경우)
-        if (newUser.getUserNickname() != null && !newUser.getUserNickname().trim().isEmpty()) {
-            usersDomainService.checkNicknameDuplication(newUser.getUserNickname());
+        if (newUser.getUserNickname() != null && !newUser.getUserNickname().isBlank()) {
+            isNicknameDuplicated(newUser.getUserNickname());
         }
 
         // CreateUserRequest DTO를 Users 엔티티로 변환
         Users users = modelMapper.map(newUser, Users.class);
 
         // 비밀번호 암호화 후 Users 객체에 설정
-        users.encryptPassword(passwordEncoder.encode(newUser.getUserPassword()));
+//        log.info("회원가입 요청 수신: {}", newUser);
+//        log.info("암호화 전 비밀번호: {}", newUser.getUserPassword());
+        String encryptedPassword = passwordEncoder.encode(newUser.getUserPassword());
+//        log.info("암호화된 비밀번호: {}", encryptedPassword);
+        newUser.setUserPassword(encryptedPassword);
 
         // 닉네임이 없는 경우 자동 생성
         if (newUser.getUserNickname() == null || newUser.getUserNickname().isBlank()) {
@@ -149,6 +153,7 @@ public class UsersCommandService {
     }
 
     // 비밀번호 재설정 토큰
+    @Transactional
     public void sendPasswordResetUrl(FindPasswordRequest findPasswordRequest) {
 
         UserPwTokenDTO userPwTokenDTO = usersDomainService.findByUserEmailAndUserPhone(findPasswordRequest.getUserEmail(), findPasswordRequest.getUserPhone());
@@ -169,10 +174,31 @@ public class UsersCommandService {
     }
 
     // 토큰을 이용한 비밀번호 재설정
+    @Transactional
     public void resetPassword(String token, ResetPasswordRequest request) {
 
         UserPwDTO userPwDTO = usersDomainService.findByPwResetToken(token);
         // 새로운 비밀번호 설정
         usersDomainService.saveNewPw(userPwDTO, request);
+        usersDomainService.makeTokenDueTimeNull(userPwDTO);
+    }
+
+    // 휴대폰 중복체크
+    @Transactional
+    public void isPhoneDuplicated(String userPhone) {
+        usersDomainService.isPhoneDuplicated(userPhone);
+    }
+
+    // 닉네임 중복체크
+    @Transactional
+    public void isNicknameDuplicated(String userNickname) {
+        usersDomainService.checkNicknameDuplication(userNickname);
+    }
+
+    // 이메일 중복체크
+    @Transactional
+    public void isEmailDuplicated(String email) {
+        if(usersDomainService.existsByUserEmail(email))
+            throw new RestApiException(ErrorCode.DUPLICATED_USER_EMAIL);
     }
 }

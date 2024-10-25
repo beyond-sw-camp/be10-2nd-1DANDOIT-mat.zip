@@ -145,7 +145,7 @@
         WHERE
         l.list_status = 'active'
         ORDER BY
-        listLike DESC;
+        like_count DESC;
     </select>
 
     <select id="getPopularList" resultMap="ListSearchDTO">

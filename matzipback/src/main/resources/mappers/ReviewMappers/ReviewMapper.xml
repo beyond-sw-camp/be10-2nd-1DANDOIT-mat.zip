@@ -29,6 +29,9 @@
         <if test="restaurantTitle != null">
             AND restaurant.restaurant_title LIKE CONCAT('%', #{restaurantTitle}, '%')
         </if>
+        <if test="restaurantSeq != null">
+            AND restaurant.restaurant_seq LIKE CONCAT('%', #{restaurantSeq}, '%')
+        </if>
         GROUP BY review.review_seq
         ORDER BY review.review_created_time DESC
         LIMIT #{limit} OFFSET #{offset}
@@ -50,6 +53,9 @@
         </if>
         <if test="restaurantTitle != null">
             AND restaurant.restaurant_title LIKE CONCAT('%', #{restaurantTitle}, '%')
+        </if>
+        <if test="restaurantSeq != null">
+            AND restaurant.restaurant_seq LIKE CONCAT('%', #{restaurantSeq}, '%')
         </if>
     </select>
 

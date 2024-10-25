@@ -22,11 +22,12 @@ public class ReviewQueryService {
             Integer size,
             String userNickname,
             String reviewContent,
-            String restaurantTitle) {
+            String restaurantTitle,
+            Long restaurantSeq) {
         int offset = (page - 1) * size;
-        List<ReviewListDto> reviews = reviewMapper.selectReviews(offset, size, userNickname, reviewContent, restaurantTitle);
+        List<ReviewListDto> reviews = reviewMapper.selectReviews(offset, size, userNickname, reviewContent, restaurantTitle, restaurantSeq);
 
-        long totalItems = reviewMapper.countReviews(userNickname, reviewContent, restaurantTitle);
+        long totalItems = reviewMapper.countReviews(userNickname, reviewContent, restaurantTitle, restaurantSeq);
 
         return ReviewListResponse.builder()
                 .reviews(reviews)

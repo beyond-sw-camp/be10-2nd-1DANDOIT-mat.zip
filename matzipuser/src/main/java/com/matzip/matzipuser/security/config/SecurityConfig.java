@@ -48,7 +48,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auths -> {
                     // 회원가입 Post 는 인증 필요 없음
                     auths.requestMatchers(
-                            new AntPathRequestMatcher("/user/api/v1/auth/register"),
 //                            new AntPathRequestMatcher("/user/api/v1/**"),
 //                            new AntPathRequestMatcher("/**"),
                             new AntPathRequestMatcher("/swagger-ui/index.html"),
@@ -116,7 +115,6 @@ public class SecurityConfig {
     private void userAuthConnection(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auths) {
         auths.requestMatchers(
                 new AntPathRequestMatcher("/user/api/v1/user-activity/point", "PUT"),
-                new AntPathRequestMatcher("/user/api/v1/auth/logout", "POST"),
                 new AntPathRequestMatcher("/user/api/v1/follow", "POST"),
                 new AntPathRequestMatcher("/user/api/v1/user/{userSeq}", "PUT"),
                 new AntPathRequestMatcher("/user/api/v1/user/{userSeq}", "DELETE"),
@@ -134,8 +132,11 @@ public class SecurityConfig {
     // 모든 접근 url
     private void allAuthConnection(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auths) {
         auths.requestMatchers(
-                new AntPathRequestMatcher("/user/api/v1/auth/mai-verification", "POST"),
+                new AntPathRequestMatcher("/user/api/v1/auth/logout", "POST"),
+                new AntPathRequestMatcher("/user/api/v1/auth/mail-verification", "POST"),
                 new AntPathRequestMatcher("/user/api/v1/auth/chkEmailCode", "POST"),
+                new AntPathRequestMatcher("/user/api/v1/user/check-phone-duplicate", "POST"),
+                new AntPathRequestMatcher("/user/api/v1/user/check-nickname-duplicate", "POST"),
                 new AntPathRequestMatcher("/user/api/v1/auth/register", "POST"),
                 new AntPathRequestMatcher("/user/api/v1/auth/find-email", "POST"),
                 new AntPathRequestMatcher("/user/api/v1/auth/send-pw-reset-url", "POST"),

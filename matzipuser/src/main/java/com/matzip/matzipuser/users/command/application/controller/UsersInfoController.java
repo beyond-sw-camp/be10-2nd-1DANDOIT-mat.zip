@@ -5,10 +5,8 @@ import com.matzip.matzipuser.exception.ErrorCode;
 import com.matzip.matzipuser.exception.RestApiException;
 import com.matzip.matzipuser.responsemessage.SuccessCode;
 import com.matzip.matzipuser.responsemessage.SuccessResMessage;
+import com.matzip.matzipuser.users.command.application.dto.*;
 import com.matzip.matzipuser.users.command.application.service.UsersCommandService;
-import com.matzip.matzipuser.users.command.application.dto.DeleteUserRequest;
-import com.matzip.matzipuser.users.command.application.dto.UpdateUserRequest;
-import com.matzip.matzipuser.users.command.application.dto.UpdateUserStatusDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -32,7 +30,7 @@ public class UsersInfoController {
     public ResponseEntity<SuccessResMessage> updateUser(
             @PathVariable long userSeq,
             @Valid @RequestBody UpdateUserRequest updateUserInfo) {
-        log.info("GET /user/api/v1/users/list/{userSeq}/edit - 회원정보 수정 요청 회원번호 : {}, updateUserInfo: {}", userSeq, updateUserInfo);
+//        log.info("GET /user/api/v1/users/list/{userSeq}/edit - 회원정보 수정 요청 회원번호 : {}, updateUserInfo: {}", userSeq, updateUserInfo);
 
         // 현재 로그인한 유저의 userSeq를 가져옴
         long currentUserSeq = CustomUserUtils.getCurrentUserSeq();
@@ -51,7 +49,7 @@ public class UsersInfoController {
     @DeleteMapping("/{userSeq}")
     @Operation(summary = "회원탈퇴", description = "비밀번호 검증 후 탈퇴를 할 수 있다.")
     public ResponseEntity<SuccessResMessage> deleteUser(@PathVariable long userSeq, @RequestBody DeleteUserRequest deleteUserInfo) {
-        log.info("GET /user/api/v1users/list/{userSeq}/delete - 회원 탈퇴 요청 : {}, {}", userSeq, deleteUserInfo);
+//        log.info("GET /user/api/v1users/list/{userSeq}/delete - 회원 탈퇴 요청 : {}, {}", userSeq, deleteUserInfo);
 
         // 현재 로그인한 유저의 userSeq를 가져옴
         long currentUserSeq = CustomUserUtils.getCurrentUserSeq();
@@ -77,6 +75,23 @@ public class UsersInfoController {
         usersCommandService.updateUserStatus(userSeq, updateUserStatusDTO);
 
         return ResponseEntity.ok().build();
+    }
+
+    /* 휴대폰 중복체크 */
+    @PostMapping("/check-phone-duplicate")
+    @Operation(summary = "휴대폰 번호 중복 체크", description = "회원가입과 정보수정 시 입력한 휴대폰 번호의 중복 여부를 확인한다.")
+    public ResponseEntity<SuccessResMessage> checkPhoneDuplicate(@Valid @RequestBody PhoneCheckRequest request) {
+        usersCommandService.isPhoneDuplicated(request.getUserPhone());
+
+        return ResponseEntity.ok(new SuccessResMessage(SuccessCode.AVAILABLE_ELEMENT));
+    }
+
+    /* 닉네임 중복체크 */
+    @PostMapping("/check-nickname-duplicate")
+    @Operation(summary = "닉네임 중복 체크", description = "닉네임 중복 여부를 확인한다.")
+    public ResponseEntity<SuccessResMessage> checkNicknameDuplicate(@Valid @RequestBody NicknameCheckRequest request) {
+        usersCommandService.isNicknameDuplicated(request.getUserNickname());
+        return ResponseEntity.ok(new SuccessResMessage(SuccessCode.AVAILABLE_ELEMENT));
     }
 
 

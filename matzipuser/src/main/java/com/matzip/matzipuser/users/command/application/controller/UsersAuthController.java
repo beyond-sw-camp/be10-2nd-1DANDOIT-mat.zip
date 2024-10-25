@@ -65,7 +65,7 @@ public class UsersAuthController {
     /* 비밀번호 찾기 - 비밀번호 재설정 */
     @PostMapping("/reset-password")
     @Operation(summary = "비밀번호 재설정", description = "토큰을 이용해 새로운 비밀번호를 설정합니다.")
-    public ResponseEntity<SuccessResMessage> resetPassword(@RequestParam String token, @RequestBody ResetPasswordRequest request) {
+    public ResponseEntity<SuccessResMessage> resetPassword(@RequestParam String token,  @Valid @RequestBody ResetPasswordRequest request) {
 //        log.info("POST /user/api/v1/auth/password - 토큰을 이용한 비밀번호 재설정  resetPassword: {}", request);
         usersCommandService.resetPassword(token, request);
 

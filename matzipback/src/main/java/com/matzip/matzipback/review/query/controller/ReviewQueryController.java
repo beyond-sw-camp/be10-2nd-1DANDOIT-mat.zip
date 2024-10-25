@@ -26,9 +26,10 @@ public class ReviewQueryController {
             @RequestParam(defaultValue = "10") Integer size,
             @RequestParam(required = false) String user,
             @RequestParam(required = false) String content,
-            @RequestParam(required = false) String restaurant) {
+            @RequestParam(required = false) String restaurant,
+            @RequestParam(required = false) Long restaurantSeq) {
 
-        ReviewListResponse response = reviewQueryService.getReviews(page, size, user, content, restaurant);
+        ReviewListResponse response = reviewQueryService.getReviews(page, size, user, content, restaurant, restaurantSeq);
 
         return ResponseEntity.ok(response);
     }

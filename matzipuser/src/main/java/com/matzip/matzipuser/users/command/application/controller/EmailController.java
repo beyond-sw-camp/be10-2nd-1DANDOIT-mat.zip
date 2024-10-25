@@ -5,6 +5,7 @@ import com.matzip.matzipuser.users.command.application.dto.EmailSendRequest;
 import com.matzip.matzipuser.users.command.application.service.EmailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ public class EmailController {
 
     @PostMapping("/auth/mail-verification")
     @Operation(summary = "이메일 인증", description = "입력받은 이메일로 인증코드를 발송한다.")
-    public ResponseEntity<String> sendVerificationCode(@RequestBody EmailSendRequest request) {
+    public ResponseEntity<String> sendVerificationCode(@Valid  @RequestBody EmailSendRequest request) {
 //        log.info("POST /api/v1/auth/mail-verification - 이메일 인증요청 : {}", request);
         emailService.sendSignUpEmail(request.getUserEmail(), request.getUserName());
 

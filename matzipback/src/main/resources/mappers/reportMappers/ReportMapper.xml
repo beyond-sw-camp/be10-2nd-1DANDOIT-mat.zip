@@ -38,6 +38,9 @@
         <if test="reportedUserSeq != null">
             AND reported_user_seq = #{reportedUserSeq}
         </if>
+        <if test="penaltySeq != null">
+            AND penalty_seq = #{penaltySeq}
+        </if>
         <if test="reportStatus != null">
             AND report_status = #{reportStatus}
         </if>
@@ -72,6 +75,9 @@
         </if>
         <if test="reportedUserSeq != null">
             AND reported_user_seq = #{reportedUserSeq}
+        </if>
+        <if test="penaltySeq != null">
+            AND penalty_seq = #{penaltySeq}
         </if>
         <if test="reportStatus != null">
             AND report_status = #{reportStatus}
