@@ -5,7 +5,8 @@
 <mapper namespace="com.matzip.matzipback.board.query.mapper.BoardMapper">
 
     <select id="getBoardCategories" resultType="com.matzip.matzipback.board.query.dto.BoardCategoryDTO">
-        SELECT board_category_name
+        SELECT board_category_seq
+             , board_category_name
           FROM board_category
     </select>
 
