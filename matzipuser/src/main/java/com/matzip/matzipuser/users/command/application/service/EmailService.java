@@ -2,6 +2,7 @@ package com.matzip.matzipuser.users.command.application.service;
 
 import com.matzip.matzipuser.exception.ErrorCode;
 import com.matzip.matzipuser.exception.RestApiException;
+import com.matzip.matzipuser.users.command.domain.service.UsersDomainService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ import static com.matzip.matzipuser.exception.ErrorCode.SEND_MAIL_FAIL;
 public class EmailService {
 
     private final JavaMailSender mailSender;
+    private final UsersDomainService usersDomainService;
     private final Map<String, String> verificationCodes = new HashMap<>();  // 인증 코드 저장
     private final Map<String, LocalDateTime> codeExpireTimes = new HashMap<>(); // 인증 코드 만료 시간 저장
     private final Map<String, Boolean> emailVerifiedMap = new HashMap<>(); // 인증 성공 상태 저장
@@ -38,6 +40,11 @@ public class EmailService {
     // 회원가입 인증코드 보내기
     public void sendSignUpEmail(String email, String name){
 //        log.info("========인증코드 발송 서비스 - sendSignUpEmail : email: {}========", email);
+
+        if(usersDomainService.existsByUserEmail(email)){
+            throw new RestApiException(ErrorCode.DUPLICATED_USER_EMAIL);
+        }
+
         String subject = "[맛zip]회원가입 인증코드입니다.";
         String verificationCode = makeVerificationCode();
         verificationCodes.put(email, verificationCode);
