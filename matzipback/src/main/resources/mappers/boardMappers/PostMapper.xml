@@ -143,7 +143,7 @@
          RIGHT JOIN post b USING (post_seq)
           LEFT JOIN users c ON (a.post_comment_user_seq = c.user_seq)
          WHERE post_seq = #{postSeq}
-         ORDER BY a.post_comment_seq DESC
+         ORDER BY a.post_comment_seq
     </select>
 
     <select id="getTop10Tags" resultType="String">

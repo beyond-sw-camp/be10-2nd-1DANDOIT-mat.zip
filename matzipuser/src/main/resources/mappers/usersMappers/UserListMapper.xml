@@ -210,9 +210,6 @@
         SELECT u.user_seq
              , u.user_email
              , u.user_nickname
-             , u.user_social_yn
-             , u.user_social_site
-             , u.business_verified_yn
              , CASE
             <![CDATA[
                WHEN u.penalty_yn = 'Y'
@@ -281,18 +278,6 @@
             </if>
             <if test="userAuth == 'admin'">
                 <!-- 관리자일 때만 탈퇴 회원도 조회, 필터링은 관리자만 가능 -->
-                <!-- 소셜회원 여부 필터링 -->
-                <if test="socialYn.equals('Y') and socialYn != null and socialYn != ''">
-                    AND u.user_social_yn = #{socialYn}
-                    <!-- 소셜회원인 경우에는 socialSite 보이게 조건 추가 -->
-                    <if test="socialSite != null and socialSite != ''">
-                        AND u.user_social_site = #{socialSite}
-                    </if>
-                </if>
-                <!-- 사업자 인증여부 필터링 -->
-                <if test="businessVerifiedYn != null and businessVerifiedYn != ''">
-                    AND u.business_verified_yn = #{businessVerifiedYn}
-                </if>
                 <!-- 인기회원 여부 필터링 -->
                 <if test="influencerYn != null and influencerYn != ''">
                     AND ua.influencer_yn = #{influencerYn}
@@ -450,12 +435,12 @@
              , al.active_level_name
              , al.active_level_standard
              , ua.influencer_yn
-             , u.business_verified_yn
-             , bl.business_name
-             , bl.business_number
-             , bl.business_address
-             , bl.business_verification_date
-             , bl.business_verification_status
+#              , u.business_verified_yn
+#              , bl.business_name
+#              , bl.business_number
+#              , bl.business_address
+#              , bl.business_verification_date
+#              , bl.business_verification_status
              , (SELECT COUNT(*) FROM lists  WHERE list_user_seq = u.user_seq) AS listCount
              , (SELECT COUNT(*) FROM review WHERE review_user_seq = u.user_seq) AS reviewCount
              , (SELECT COUNT(*) FROM follow WHERE followed_user_seq = u.user_seq) AS followerCount
@@ -464,7 +449,7 @@
         LEFT JOIN user_activity ua ON u.user_seq = ua.activity_user_seq
         LEFT JOIN active_level al ON ua.active_level_seq = al.active_level_seq
         LEFT JOIN penalty p ON u.user_seq = p.penalty_user_seq
-        LEFT JOIN business_license bl ON bl.user_seq = u.user_seq
+#         LEFT JOIN business_license bl ON bl.user_seq = u.user_seq
        WHERE
              u.user_seq = #{userSeq}
     </select>

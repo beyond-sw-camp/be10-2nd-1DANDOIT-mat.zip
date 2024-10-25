@@ -61,7 +61,7 @@ public class UsersQueryController {
         if(userAuth.equals("user")) {   // 일반회원
             users =  usersInfoService.getSearchUserList(searchType, searchWord, socialSite, influencerYn, "actice", userAuth, orderBy, page, size);
         } else {    // 관리자
-            users =  usersInfoService.getSearchUserList(searchType, searchWord, socialSite, influencerYn, userStatus, null, orderBy, page, size);
+            users =  usersInfoService.getSearchUserList(searchType, searchWord, socialSite, influencerYn, userStatus, userAuth, orderBy, page, size);
 //            users=null;
         }
 
