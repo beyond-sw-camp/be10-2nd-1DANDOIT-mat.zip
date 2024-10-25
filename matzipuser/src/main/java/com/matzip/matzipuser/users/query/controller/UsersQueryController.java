@@ -64,9 +64,7 @@ public class UsersQueryController {
     public ResponseEntity<SuccessSearchResMessage<?>> getSearchUserList(
             @RequestParam(value = "searchType", required = false) String searchType,
             @RequestParam(value = "searchWord", required = false) String searchWord,
-            @RequestParam(value = "socialYn", required = false) String socialYn,
             @RequestParam(value = "socialSite", required = false) String socialSite,
-            @RequestParam(value = "businessVerifiedYn", required = false) String businessVerifiedYn,
             @RequestParam(value = "influencerYn", required = false) String influencerYn,
             @RequestParam(value = "userStatus", required = false) String userStatus,
             @RequestParam(value = "orderBy", defaultValue = "regDateDesc") String orderBy,
@@ -77,9 +75,10 @@ public class UsersQueryController {
         String userAuth = CustomUserUtils.getCurrentUserAuthorities().iterator().next().getAuthority();
         AllUserInfoResponseDTO users;
         if(userAuth.equals("user")) {   // 일반회원
-            users =  usersInfoService.getSearchUserList(searchType, searchWord, socialYn, socialSite, businessVerifiedYn, influencerYn, "actice", userAuth, orderBy, page, size);
+            users =  usersInfoService.getSearchUserList(searchType, searchWord, socialSite, influencerYn, "actice", userAuth, orderBy, page, size);
         } else {    // 관리자
-            users =  usersInfoService.getSearchUserList(searchType, searchWord, socialYn, socialSite, businessVerifiedYn, influencerYn, userStatus, userAuth, orderBy, page, size);
+            users =  usersInfoService.getSearchUserList(searchType, searchWord, socialSite, influencerYn, userStatus, null, orderBy, page, size);
+//            users=null;
         }
 
 

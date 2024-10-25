@@ -29,9 +29,7 @@ public interface UsersInfoMapper {
     // 검색조회
     List<UserInfoDTO> searchUserInfo(@Param("searchType") String searchType,
                                      @Param("searchWord") String searchWord,
-                                     @Param("socialYn") String socialYn,
                                      @Param("socialSite") String socialSite,
-                                     @Param("businessVerifiedYn") String businessVerifiedYn,
                                      @Param("influencerYn") String influencerYn,
                                      @Param("userStatus") String userStatus,
                                      @Param("userAuth") String userAuth,
@@ -42,9 +40,7 @@ public interface UsersInfoMapper {
     // 검색된 유저 수
     Long getSearchUserCount(@Param("searchType") String searchType,
                             @Param("searchWord") String searchWord,
-                            @Param("socialYn") String socialYn,
                             @Param("socialSite") String socialSite,
-                            @Param("businessVerifiedYn") String businessVerifiedYn,
                             @Param("influencerYn") String influencerYn,
                             @Param("userStatus") String userStatus,
                             @Param("userAuth") String userAuth);
