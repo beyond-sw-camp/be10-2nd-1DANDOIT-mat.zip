@@ -26,16 +26,16 @@ public class ReportQueryService {
 
     // 신고 검색 및 조회
     @Transactional(readOnly = true)
-    public ReportListResponse getReports(Integer page, Integer size, Long reporterUserSeq, Long reportedUserSeq, String reportStatus, Long category, Long sequence) {
+    public ReportListResponse getReports(Integer page, Integer size, Long reporterUserSeq, Long reportedUserSeq, Long penaltySeq, String reportStatus, Long category, Long sequence) {
         int offset = (page - 1) * size;
 
-        List<ReportDTO> reports = reportMapper.selectReports(offset, size, reporterUserSeq, reportedUserSeq, reportStatus, category, sequence);
+        List<ReportDTO> reports = reportMapper.selectReports(offset, size, reporterUserSeq, reportedUserSeq, penaltySeq, reportStatus, category, sequence);
 
         for (ReportDTO report : reports) {
             report.setReasons(reportMapper.selectReportReasons(report.getReportSeq()));
         }
 
-        long totalItems = reportMapper.countReports(reporterUserSeq, reportedUserSeq, reportStatus, category, sequence);
+        long totalItems = reportMapper.countReports(reporterUserSeq, reportedUserSeq, penaltySeq, reportStatus, category, sequence);
 
         return ReportListResponse.builder().reports(reports)
                 .currentPage(page)
