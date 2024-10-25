@@ -51,12 +51,14 @@ public class ReportQueryController {
             @RequestParam(defaultValue = "10") Integer size,
             @RequestParam(required = false) Long reporterUserSeq,
             @RequestParam(required = false) Long reportedUserSeq,
+            @RequestParam(required = false) Long penaltySeq,
             @RequestParam(required = false) String reportStatus,
             @RequestParam(required = false) Long category,
             @RequestParam(required = false) Long sequence) {
 
         try { if (CustomUserUtils.getCurrentUserAuthorities().iterator().next().getAuthority().equals("admin")) {
-                return ResponseEntity.ok(reportQueryService.getReports(page, size, reporterUserSeq, reportedUserSeq, reportStatus, category, sequence));
+            System.out.println("CustomUserUtils.getCurrentUserAuthorities() = " + CustomUserUtils.getCurrentUserAuthorities());
+                return ResponseEntity.ok(reportQueryService.getReports(page, size, reporterUserSeq, reportedUserSeq, penaltySeq, reportStatus, category, sequence));
             } else { throw new RestApiException(FORBIDDEN_ACCESS); }
         } catch (NullPointerException e) { throw new RestApiException(UNAUTHORIZED_REQUEST); }
     }
