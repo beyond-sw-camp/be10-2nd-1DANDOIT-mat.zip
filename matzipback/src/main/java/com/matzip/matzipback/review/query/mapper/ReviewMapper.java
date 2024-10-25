@@ -18,12 +18,14 @@ public interface ReviewMapper {
             @Param("limit") int limit,
             @Param("userNickname") String userNickname,
             @Param("reviewContent") String reviewContent,
-            @Param("restaurantTitle") String restaurantTitle);
+            @Param("restaurantTitle") String restaurantTitle,
+            @Param("restaurantSeq") Long restaurantSeq);
 
     long countReviews(
             @Param("userNickname") String userNickname,
             @Param("reviewContent") String reviewContent,
-            @Param("restaurantTitle") String restaurantTitle);
+            @Param("restaurantTitle") String restaurantTitle,
+            @Param("restaurantSeq") Long restaurantSeq);
 
     ReviewDetailResponse selectReview(
             @Param("reviewSeq") Long reviewSeq);
