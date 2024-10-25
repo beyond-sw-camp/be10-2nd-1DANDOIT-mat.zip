@@ -7,6 +7,7 @@
     <select id="searchPosts" resultType="com.matzip.matzipback.board.query.dto.PostDTO">
         SELECT
                b.board_category_name
+             , a.post_seq
              , a.post_title
              , a.post_user_seq
              , c.user_nickname
@@ -22,7 +23,7 @@
         <if test="userNickname != null">
             AND c.user_nickname LIKE CONCAT('%', #{userNickname}, '%')
         </if>
-        ORDER BY a.post_seq
+        ORDER BY a.post_seq DESC
         LIMIT #{size} OFFSET #{offset}
     </select>
 
@@ -44,6 +45,7 @@
     <select id="getPostsByCategory" resultType="com.matzip.matzipback.board.query.dto.PostDTO">
         SELECT
                b.board_category_name
+             , a.post_seq
              , a.post_title
              , a.post_user_seq
              , c.user_nickname
@@ -57,7 +59,7 @@
             <if test="boardSeq != null">
                 AND b.board_category_seq = #{boardSeq}
             </if>
-         ORDER BY a.post_seq
+         ORDER BY a.post_seq DESC
          LIMIT #{size} OFFSET #{offset}
     </select>
 
@@ -141,6 +143,7 @@
          RIGHT JOIN post b USING (post_seq)
           LEFT JOIN users c ON (a.post_comment_user_seq = c.user_seq)
          WHERE post_seq = #{postSeq}
+         ORDER BY a.post_comment_seq DESC
     </select>
 
     <select id="getTop10Tags" resultType="String">

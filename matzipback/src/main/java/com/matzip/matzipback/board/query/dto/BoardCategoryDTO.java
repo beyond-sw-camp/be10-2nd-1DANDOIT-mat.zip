@@ -11,5 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class BoardCategoryDTO {
 
+    private Long boardCategorySeq;
     private String BoardCategoryName;
 }

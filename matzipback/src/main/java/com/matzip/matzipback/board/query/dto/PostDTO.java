@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @ToString
 public class PostDTO {
     private String boardCategoryName;           // 게시판 카테고리 이름
+    private Long postSeq;
     private String postTitle;                   // 게시글 제목
     private String postContent;                 // 게시글 내용
     private String userNickname;                // 게시글 작성자 닉네임
