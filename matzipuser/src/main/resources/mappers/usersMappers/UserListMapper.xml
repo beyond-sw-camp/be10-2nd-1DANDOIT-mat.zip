@@ -375,18 +375,6 @@
             </if>
             <if test="userAuth == 'admin'">
                 <!-- 관리자일 때만 탈퇴 회원도 조회, 필터링은 관리자만 가능 -->
-                <!-- 소셜회원 여부 필터링 -->
-                <if test="socialYn.equals('Y') and socialYn != null and socialYn != ''">
-                    AND u.user_social_yn = #{socialYn}
-                    <!-- 소셜회원인 경우에는 socialSite 보이게 조건 추가 -->
-                    <if test="socialSite != null and socialSite != ''">
-                        AND u.user_social_site = #{socialSite}
-                    </if>
-                </if>
-                <!-- 사업자 인증여부 필터링 -->
-                <if test="businessVerifiedYn != null and businessVerifiedYn != ''">
-                    AND u.business_verified_yn = #{businessVerifiedYn}
-                </if>
                 <!-- 인기회원 여부 필터링 -->
                 <if test="influencerYn != null and influencerYn != ''">
                     AND ua.influencer_yn = #{influencerYn}
