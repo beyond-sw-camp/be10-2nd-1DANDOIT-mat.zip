@@ -8,6 +8,7 @@ import java.util.List;
 @Getter
 @Setter
 public class ListSearchDTO {
+    private long listSeq;
     private long listUserSeq;
     private String userNickname;
     private String listTitle;
