@@ -416,6 +416,7 @@
                 END AS user_phone
              , u.user_social_yn
              , u.user_social_site
+             , u.user_reg_date
              , CASE
              <![CDATA[
                     WHEN u.penalty_yn = 'Y'
@@ -448,11 +449,6 @@
                 THEN u.user_status
                 ELSE NULL
                 END AS user_status
-             , CASE
-                WHEN #{userAuth} = 'admin'
-                THEN u.user_reg_date
-                ELSE NULL
-                END AS user_reg_date
              , CASE
                 WHEN #{userAuth} = 'admin'
                 THEN u.user_delete_date
