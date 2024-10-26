@@ -6,6 +6,7 @@
 <mapper namespace="com.matzip.matzipback.matzipList.query.mapper.ListQueryMapper">
 
     <resultMap id="listBoxContent" type="com.matzip.matzipback.matzipList.query.dto.ListSearchAllDTO">
+        <result property="listSeq" column="list_seq"/>
         <result property="listUserSeq" column="list_user_seq"/>
         <result property="userNickname" column="user_nickname"/>
         <!-- 리스트 정보를 리스트 조회 안으로 -->
@@ -19,6 +20,7 @@
 
     <select  id="getListBox" resultMap="listBoxContent">
         SELECT
+        l.list_seq,
         l.list_user_seq,
         u.user_nickname,
         l.list_title,
@@ -37,6 +39,7 @@
 
     <select  id="getListsByUserListBox" resultMap="listBoxContent">
         SELECT
+        l.list_seq,
         l.list_user_seq,
         u.user_nickname,
         l.list_title,
@@ -96,7 +99,7 @@
         LEFT JOIN `like` k ON m.list_seq = k.list_seq
         LEFT JOIN users u ON l.list_user_seq = u.user_seq
         WHERE
-               l.list_seq = #{listSeq}
+        l.list_seq = #{listSeq}
         GROUP BY
         l.list_seq, r.restaurant_seq, m.list_matzip_seq
         ORDER BY
@@ -124,6 +127,7 @@
     </select>
 
     <resultMap id="ListSearchDTO" type="com.matzip.matzipback.matzipList.query.dto.ListSearchDTO">
+        <result property="listSeq" column="list_seq"/>
         <result property="listUserSeq" column="list_user_seq"/>
         <result property="userNickname" column="user_nickname"/>
         <result property="listTitle" column="list_title"/>
@@ -133,6 +137,7 @@
 
     <select id="getListAll" resultMap="ListSearchDTO">
         SELECT
+        l.list_seq,
         l.list_user_seq,
         u.user_nickname,
         l.list_title,
@@ -150,6 +155,7 @@
 
     <select id="getPopularList" resultMap="ListSearchDTO">
         SELECT
+        l.list_seq,
         l.list_user_seq,
         u.user_nickname,
         l.list_title,
