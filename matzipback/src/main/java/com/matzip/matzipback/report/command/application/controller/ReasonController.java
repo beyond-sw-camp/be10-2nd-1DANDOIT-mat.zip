@@ -88,19 +88,17 @@ public class ReasonController {
     }
 
     /* 신고사유 삭제 - 다중삭제 */
-    @DeleteMapping("/{reasonSeq}/delete")
+    @DeleteMapping("/{reasonSeq}")
     @Operation(summary = "신고사유 삭제", description = "관리자가 신고 사유를 삭제한다.")
-    public ResponseEntity<SuccessResMessage> deleteReason(@RequestBody DeleteReasonDTO deleteReasonDTO) {
-        log.info("DELETE /api/v1/admin/report/reason/{reasonSeq}/delete - 신고사유 삭제 deleteReason : {}", deleteReasonDTO);
+    public ResponseEntity<SuccessResMessage> deleteReason(@PathVariable Long reasonSeq) {
 
         // 관리자 여부 확인
         if (!isAdmin()) {
-            log.debug("========관리자가 아닙니다.========");
             throw new RestApiException(FORBIDDEN_ACCESS);   // 권한 없음
         }
 
 
-        reasonCommandService.deleteReason(deleteReasonDTO.getReasonSeqs());
+        reasonCommandService.deleteReason(reasonSeq);
         return ResponseEntity.ok(new SuccessResMessage(SuccessCode.BASIC_DELETE_SUCCESS));
     }
 
