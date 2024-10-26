@@ -43,7 +43,7 @@ public class ListQueryController {
     }
 
     // 인기 리스트 조회
-    @GetMapping("/listBox/top")
+    @GetMapping("/listbox/popular")
     @Operation(summary = "인기 리스트 조회", description = "인기리스트를 조회한다.")
     public ResponseEntity<SuccessSearchResMessage<?>> getPopularList(){
 
@@ -82,7 +82,7 @@ public class ListQueryController {
     @GetMapping("/listbox/{listUserSeq}")
     @Operation(summary = "다른 유저 리스트 서랍 조회", description = "다른 유저의 리스트 서랍을 조회한다.")
     public ResponseEntity<SuccessSearchResMessage<?>> getUserListBox(
-            @RequestParam Long listUserSeq,
+            @PathVariable Long listUserSeq,
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size
 
