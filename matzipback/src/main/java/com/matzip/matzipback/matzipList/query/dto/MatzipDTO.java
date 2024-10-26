@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MatzipDTO {
-
+    private String restaurantSeq;
     private String restaurantTitle;
     private String listMatzipComment;
     private String restaurantAddress;
