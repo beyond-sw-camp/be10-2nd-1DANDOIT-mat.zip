@@ -2,12 +2,14 @@ package com.matzip.matzipuser.users.command.application.dto;
 
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class ResetPasswordRequest {
 
     @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*.,?])[A-Za-z\\d!@#$%^&*.,?]{8,}$",
