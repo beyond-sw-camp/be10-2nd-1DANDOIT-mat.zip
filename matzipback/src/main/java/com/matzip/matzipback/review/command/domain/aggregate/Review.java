@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "make")
+@Table(name = "review")
 @Getter
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
