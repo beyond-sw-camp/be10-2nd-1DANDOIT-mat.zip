@@ -174,5 +174,24 @@ public class UsersDomainService {
 
         foundUser.updatePasswordToken(null, null);
     }
+
+    public void changePassword(long userSeq, ResetPasswordRequest request) {
+
+        Users foundUser = usersDomainRepository.findById(userSeq)
+                .orElseThrow(() -> new RestApiException(ErrorCode.CANNOT_FIND_USER));
+
+        if (!passwordEncoder.matches(request.getUserPassword(), foundUser.getUserPassword())) {
+            throw new RestApiException(ErrorCode.NOT_UPDATED_DUPLICATED);
+        }
+
+        request.setUserPassword(passwordEncoder.encode(request.getUserPassword()));
+
+        try {
+            modelMapper.map(request, foundUser);
+            usersDomainRepository.save(foundUser);
+        } catch (Exception e) {
+            throw new RestApiException(ErrorCode.NOT_UPDATED);
+        }
+    }
 }
 
