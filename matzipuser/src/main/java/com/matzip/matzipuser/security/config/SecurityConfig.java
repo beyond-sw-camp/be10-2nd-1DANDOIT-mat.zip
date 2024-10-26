@@ -57,10 +57,12 @@ public class SecurityConfig {
                             new AntPathRequestMatcher("/user/v3/api-docs")
                             ).permitAll();
 
-                    allAuthConnection(auths);
+                    commonAuthConnection(auths);
+
                     adminAuthConnection(auths);
                     userAuthConnection(auths);
 
+                    allAuthConnection(auths);
 
                     auths.anyRequest().authenticated();
 
@@ -92,6 +94,16 @@ public class SecurityConfig {
 
     }
 
+    private void commonAuthConnection(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auths) {
+        auths.requestMatchers(
+                new AntPathRequestMatcher("/user/api/v1/user/email", "GET"),
+                new AntPathRequestMatcher("/user/api/v1/user/userseq", "GET"),
+                new AntPathRequestMatcher("/user/api/v1/active-level-count", "GET"),
+                new AntPathRequestMatcher("/user/api/v1/users", "GET"),
+                new AntPathRequestMatcher("/user/api/v1/user/{userSeq}", "GET")
+        ).hasAnyAuthority("user", "admin");
+
+    }
 
     // 관리자 접근 url
     private void adminAuthConnection(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auths) {
