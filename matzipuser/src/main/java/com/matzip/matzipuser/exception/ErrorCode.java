@@ -58,7 +58,7 @@ public enum ErrorCode {
     NICKNAME_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 사용 중인 닉네임입니다. 다른 닉네임을 선택해주세요."),
 
     /* 동일한 닉네임으로 수정 */
-    NOT_UPDATED_NICKNAME(HttpStatus.CONFLICT, "현재 닉네임과 동일한 닉네임으로는 변경할 수 없습니다."),
+    NOT_UPDATED_DUPLICATED(HttpStatus.CONFLICT, "현재 정보와 동일한 정보로는 변경할 수 없습니다."),
 
     /* 휴대폰번호 중복 */
     USER_PHONE_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 사용 중인 번호입니다."),

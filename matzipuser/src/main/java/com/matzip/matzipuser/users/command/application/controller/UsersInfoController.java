@@ -26,7 +26,7 @@ public class UsersInfoController {
 
     /* 회원정보 수정 */
     @PutMapping("/{userSeq}")
-    @Operation(summary = "회원정보 수정", description = "비밀번호와 휴대폰번호, 닉네임을 수정 가능하다.")
+    @Operation(summary = "회원정보 수정", description = "휴대폰번호, 닉네임을 수정 가능하다.")
     public ResponseEntity<SuccessResMessage> updateUser(
             @PathVariable long userSeq,
             @Valid @RequestBody UpdateUserRequest updateUserInfo) {
@@ -92,6 +92,26 @@ public class UsersInfoController {
     public ResponseEntity<SuccessResMessage> checkNicknameDuplicate(@Valid @RequestBody NicknameCheckRequest request) {
         usersCommandService.isNicknameDuplicated(request.getUserNickname());
         return ResponseEntity.ok(new SuccessResMessage(SuccessCode.AVAILABLE_ELEMENT));
+    }
+
+    /* 비밀번호 변경 */
+    /* 비밀번호 찾기 - 비밀번호 재설정 */
+    @PostMapping("/change-password")
+    @Operation(summary = "비밀번호 변경", description = "회원이 비밀번호를 변경한다.")
+    public ResponseEntity<SuccessResMessage> changePassword(@PathVariable long userSeq, @Valid @RequestBody ResetPasswordRequest request) {
+//        log.info("POST /user/api/v1/user/change-password - 토큰을 이용한 비밀번호 재설정  changePassword: {}", request);
+
+        // 현재 로그인한 유저의 userSeq를 가져옴
+        long currentUserSeq = CustomUserUtils.getCurrentUserSeq();
+
+        // 로그인한 유저의 userSeq와 요청의 userSeq가 다르면 403 Forbidden 응답
+        if (currentUserSeq != userSeq) {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+            throw new RestApiException(ErrorCode.FORBIDDEN_ACCESS);
+        }
+        usersCommandService.changePassword(userSeq, request);
+
+        return ResponseEntity.ok(new SuccessResMessage(SuccessCode.BASIC_UPDATE_SUCCESS));
     }
 
 

@@ -92,11 +92,6 @@ public class UsersCommandService {
             throw new RestApiException(ErrorCode.NICKNAME_PROBLEM);
 
 
-        // 비밀번호 수정 (비밀번호가 입력된 경우)
-        if (updateUserInfo.getUserPassword() == null || updateUserInfo.getUserPassword().isBlank()) {
-            throw new RestApiException(PASSWORD_PROBLEM);
-        }
-
         // 휴대폰 번호 수정(추가 본인인증은 나중에 구현)
         if (updateUserInfo.getUserPhone() != null  && !updateUserInfo.getUserPhone().isBlank()) {
             // 중복 체크 메서드 호출
@@ -200,5 +195,20 @@ public class UsersCommandService {
     public void isEmailDuplicated(String email) {
         if(usersDomainService.existsByUserEmail(email))
             throw new RestApiException(ErrorCode.DUPLICATED_USER_EMAIL);
+    }
+
+    // 비밀번호 변경
+    @Transactional
+    public void changePassword(long userSeq, ResetPasswordRequest request) {
+
+        // 전달 된 userSeq로 Users 엔티티 조회
+        usersDomainService.existsById(userSeq);
+
+        // 비밀번호 수정 (비밀번호가 입력된 경우)
+        if (request.getUserPassword() == null || request.getUserPassword().isBlank()) {
+            throw new RestApiException(PASSWORD_PROBLEM);
+        } else {
+            usersDomainService.changePassword(userSeq, request);
+        }
     }
 }
