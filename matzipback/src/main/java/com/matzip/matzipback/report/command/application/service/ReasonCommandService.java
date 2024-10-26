@@ -85,8 +85,7 @@ public class ReasonCommandService {
 
     // 신고사유 삭제
     @Transactional
-    public void deleteReason(List<Long> reasonSeqs) {
-        log.info("========관리자의 신고사유순서 삭제 서비스 진입 - 삭제번호 : {}========", reasonSeqs);
-        reasonsRepository.deleteAllByReasonSeqIn(reasonSeqs);
+    public void deleteReason(Long reasonSeq) {
+        reasonsRepository.deleteById(reasonSeq);
     }
 }

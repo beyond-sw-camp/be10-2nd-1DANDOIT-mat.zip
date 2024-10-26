@@ -11,5 +11,5 @@ public interface ReasonsRepository {
 
     Optional<Reasons> findById(Long reasonSeq);
 
-    void deleteAllByReasonSeqIn(List<Long> reasonSeqs);
+    void deleteById(Long reasonSeq);
 }
