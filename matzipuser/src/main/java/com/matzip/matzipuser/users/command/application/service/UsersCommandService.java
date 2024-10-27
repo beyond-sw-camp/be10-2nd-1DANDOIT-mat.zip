@@ -88,16 +88,14 @@ public class UsersCommandService {
         if (updateUserInfo.getUserNickname() != null && !updateUserInfo.getUserNickname().trim().isBlank()) {
             // 중복 체크 메서드 호출
             usersDomainService.checkNicknameDuplication(updateUserInfo.getUserNickname());
-        } else
-            throw new RestApiException(ErrorCode.NICKNAME_PROBLEM);
+        }
 
 
         // 휴대폰 번호 수정(추가 본인인증은 나중에 구현)
         if (updateUserInfo.getUserPhone() != null  && !updateUserInfo.getUserPhone().isBlank()) {
             // 중복 체크 메서드 호출
             usersDomainService.isPhoneDuplicated(updateUserInfo.getUserPhone());
-        } else
-            throw new RestApiException(ErrorCode.USER_PHONE_PROBLEM);
+        }
 
         // 회원 정보 일괄 수정
         usersDomainService.updateUser(userSeq, updateUserInfo);
