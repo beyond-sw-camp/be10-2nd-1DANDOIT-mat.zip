@@ -96,7 +96,7 @@ public class UsersInfoController {
 
     /* 비밀번호 변경 */
     /* 비밀번호 찾기 - 비밀번호 재설정 */
-    @PostMapping("/change-password")
+    @PostMapping("/change-password/{userSeq}")
     @Operation(summary = "비밀번호 변경", description = "회원이 비밀번호를 변경한다.")
     public ResponseEntity<SuccessResMessage> changePassword(@PathVariable long userSeq, @Valid @RequestBody ResetPasswordRequest request) {
 //        log.info("POST /user/api/v1/user/change-password - 토큰을 이용한 비밀번호 재설정  changePassword: {}", request);
