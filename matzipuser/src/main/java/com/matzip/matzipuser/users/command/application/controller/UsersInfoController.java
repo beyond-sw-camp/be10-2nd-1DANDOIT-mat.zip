@@ -95,11 +95,10 @@ public class UsersInfoController {
     }
 
     /* 비밀번호 변경 */
-    /* 비밀번호 찾기 - 비밀번호 재설정 */
-    @PostMapping("/change-password/{userSeq}")
+    @PutMapping("/change-password/{userSeq}")
     @Operation(summary = "비밀번호 변경", description = "회원이 비밀번호를 변경한다.")
     public ResponseEntity<SuccessResMessage> changePassword(@PathVariable long userSeq, @Valid @RequestBody ResetPasswordRequest request) {
-//        log.info("POST /user/api/v1/user/change-password - 토큰을 이용한 비밀번호 재설정  changePassword: {}", request);
+//        log.info("POST /user/api/v1/user/change-password - 회원본인의 비밀번호 재설정  changePassword: {}", request);
 
         // 현재 로그인한 유저의 userSeq를 가져옴
         long currentUserSeq = CustomUserUtils.getCurrentUserSeq();
