@@ -120,7 +120,7 @@ public class EmailService {
     // 비밀번호 재설정 토큰 url 보내기
     public void sendPasswordResetUrl(String email, String token) {
 //        log.info("========비밀번호 재설정 url 이메일 전송 서비스 - sendPasswordResetUrl========");
-        String baseUrl = "http://localhost:5173";
+        String baseUrl = "http://localhost:5173/user";
 
         String resetUrl = baseUrl + "/auth/reset-password?token=" + token;
         String subject = "[맛zip] 비밀번호 재설정 링크 안내";
